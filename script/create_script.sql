@@ -4,35 +4,23 @@ USE WiseTour;
 
 CREATE TABLE Unidade_Federativa_Brasil (
 sigla CHAR(2) PRIMARY KEY,
-unidade_federativa VARCHAR(45) NOT NULL,
-regiao VARCHAR(45) NOT NULL,
-CONSTRAINT chk_sigla CHECK (sigla IN('AC', 'AL', 'AP', 'AM', 'BA', 'CE', 'DF', 
-'ES', 'GO', 'MA', 'MT', 'MS', 'MG', 'PA', 'PB', 'PR', 'PE', 'PI', 'RJ', 'RN', 'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO')),
-CONSTRAINT chk_unidade_federativa CHECK (unidade_federativa IN ('Acre', 'Alagoas', 'Amapá', 'Amazonas', 'Bahia', 'Ceará', 'Distrito Federal', 'Espírito Santo', 'Goiás', 
-'Maranhão', 'Mato Grosso', 'Mato Grosso do Sul', 'Minas Gerais', 'Pará', 'Paraíba', 'Paraná', 'Pernambuco', 'Piauí', 'Rio de Janeiro', 'Rio Grande do Norte', 
-'Rio Grande do Sul', 'Rondônia', 'Roraima', 'Santa Catarina', 'São Paulo', 'Sergipe', 'Tocantins')),
-CONSTRAINT chk_regiao CHECK (regiao IN ('Norte', 'Sul', 'Sudeste', 'Centro-Oeste', 'Nordeste'))
+unidade_federativa VARCHAR(45) NOT NULL UNIQUE,
+regiao VARCHAR(45)
 );
 
 CREATE TABLE Pais (
 id_pais INT PRIMARY KEY AUTO_INCREMENT,
-pais VARCHAR(100) NOT NULL
-);
-
-CREATE TABLE Continente (
-idContinente INT PRIMARY KEY AUTO_INCREMENT,
-continente VARCHAR(45) NOT NULL,
-CONSTRAINT chk_continente CHECK (continente IN ('América', 'Oceania', 'Ásia', 'África', 'Europa'))
+pais VARCHAR(100) NOT NULL UNIQUE
 );
 
 CREATE TABLE Fonte_Dados (
 id_fonte_dados INT PRIMARY KEY AUTO_INCREMENT,
-titulo_arquivo_fonte VARCHAR(255) NOT NULL,
+titulo_arquivo_fonte VARCHAR(255) UNIQUE NOT NULL,
 edicao VARCHAR(45) NOT NULL,
 orgao_emissor VARCHAR(45) NOT NULL,
 url_origem TEXT NOT NULL,
 data_coleta DATE NOT NULL,
-observacoes TEXT NULL
+observacoes TEXT
 );
 
 CREATE TABLE Informacao_Contato_Cadastro (
@@ -64,12 +52,20 @@ categoria VARCHAR(45) NOT NULL,
 CONSTRAINT chk_categoria CHECK (categoria IN('Erro', 'Aviso', 'Sucesso'))
 );
 
-CREATE TABLE Pais_Continente (
-fk_continente INT,
-fk_pais INT,
-CONSTRAINT FOREIGN KEY (fk_continente) REFERENCES Continente (idContinente),
-CONSTRAINT FOREIGN KEY (fk_pais) REFERENCES Pais (id_pais),
-PRIMARY KEY (fk_continente, fk_pais)
+
+CREATE TABLE Chegada_Turistas_Internacionais_Brasil_Mensal (
+id_chegadas_turistas_internacionais_brasil_mensal INT AUTO_INCREMENT,
+mes INT NOT NULL,
+ano INT NOT NULL,
+chegadas INT NOT NULL,
+via_acesso VARCHAR(45) NOT NULL,
+fk_uf_destino CHAR(2),
+fk_fonte_dados INT,
+fk_pais_origem INT,
+CONSTRAINT FOREIGN KEY (fk_uf_destino) REFERENCES Unidade_Federativa_Brasil (sigla),
+CONSTRAINT FOREIGN KEY (fk_fonte_dados) REFERENCES Fonte_Dados (id_fonte_dados),
+CONSTRAINT FOREIGN KEY (fk_pais_origem) REFERENCES Pais (id_pais),
+PRIMARY KEY (id_chegadas_turistas_internacionais_brasil_mensal, fk_uf_destino, fk_fonte_dados, fk_pais_origem)
 );
 
 CREATE TABLE Perfil_Estimado_Turistas (
@@ -77,15 +73,16 @@ id_perfil_estimado_turistas INT AUTO_INCREMENT,
 fk_pais_origem INT,
 fk_uf_entrada CHAR(2),
 ano INT NOT NULL,
-mes INT NOT NULL,
+mes INT,
 quantidade_turistas INT NOT NULL,
-genero VARCHAR(45) NOT NULL,
-faixa_etaria VARCHAR(45) NOT NULL,
+genero VARCHAR(45),
+faixa_etaria VARCHAR(45),
 via_acesso VARCHAR(45) NOT NULL,
-composicao_grupo_familiar VARCHAR(45) NOT NULL,
-fonte_informacao_viagem VARCHAR(45) NOT NULL,
-servico_agencia_turismo INT NOT NULL,
+composicao_grupo_familiar VARCHAR(45),
+fonte_informacao_viagem VARCHAR(45),
+servico_agencia_turismo INT,
 motivo_viagem VARCHAR(45) NOT NULL,
+motivacao_viagem_lazer VARCHAR(45),
 gasto_media_percapita_em_reais DOUBLE NOT NULL,
 CONSTRAINT FOREIGN KEY (fk_pais_origem) REFERENCES Pais (id_pais),
 CONSTRAINT FOREIGN KEY (fk_uf_entrada) REFERENCES Unidade_Federativa_Brasil (sigla),
