@@ -1,13 +1,5 @@
 USE WiseTour;
 
-INSERT IGNORE INTO Continente (continente) 
-VALUES 
-('América'),
-('Oceania'),
-('Ásia'),
-('África'),
-('Europa');
-
 INSERT IGNORE INTO Unidade_Federativa_Brasil (sigla, unidade_federativa, regiao)
 VALUES
 ('AC', 'Acre', 'Norte'),
