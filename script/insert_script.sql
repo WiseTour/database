@@ -30,3 +30,12 @@ VALUES
 ('SE', 'Sergipe', 'Nordeste'),
 ('TO', 'Tocantins', 'Norte'),
 ('OF', 'Outras Unidades da Federação', null);
+
+INSERT INTO Usuario (email, senha, permissao)
+VALUES ('adminm', 'admin123', 'admin'),
+('leonardo.sardinha@outlook.com', 'urubu100', 'padrao'),
+('ian.medeiros@outlook.com', 'urubu100', 'padrao'),
+('luana.liriel@outlook.com', 'urubu100', 'padrao'),
+('kenner.lima@outlook.com', 'urubu100', 'padrao'),
+('phelipe.bruione@outlook.com', 'urubu100', 'padrao'),
+('samara.damaceno@outlook.com', 'urubu100', 'padrao');
