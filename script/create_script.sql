@@ -8,6 +8,7 @@ unidade_federativa VARCHAR(45) NOT NULL UNIQUE,
 regiao VARCHAR(45)
 );
 
+
 CREATE TABLE Pais (
 id_pais INT PRIMARY KEY AUTO_INCREMENT,
 pais VARCHAR(100) NOT NULL UNIQUE
@@ -28,17 +29,10 @@ id_informacao_contato_cadastro INT PRIMARY KEY AUTO_INCREMENT,
 email VARCHAR(255) NOT NULL,
 telefone VARCHAR(11) NOT NULL,
 nome VARCHAR(255) NOT NULL,
-fidelizado VARCHAR(255) NOT NULL,
+fidelizado VARCHAR(255),
 CONSTRAINT chk_fidelizado CHECK (fidelizado IN ('Sim', 'Não'))
 );
 
-CREATE TABLE Usuario (
-id_usuario INT PRIMARY KEY AUTO_INCREMENT,
-email VARCHAR(255) NOT NULL,
-senha CHAR(12) NOT NULL,
-permissao VARCHAR(45) NOT NULL,
-CONSTRAINT chk_permissao CHECK (permissao IN ('Admin', 'Padrão'))
-);
 
 CREATE TABLE Etapa (
 idEtapa INT PRIMARY KEY AUTO_INCREMENT,
@@ -51,7 +45,6 @@ id_log_categoria_ETL INT PRIMARY KEY AUTO_INCREMENT,
 categoria VARCHAR(45) NOT NULL,
 CONSTRAINT chk_categoria CHECK (categoria IN('Erro', 'Aviso', 'Sucesso'))
 );
-
 
 CREATE TABLE Chegada_Turistas_Internacionais_Brasil_Mensal (
 id_chegadas_turistas_internacionais_brasil_mensal INT AUTO_INCREMENT,
@@ -111,7 +104,7 @@ PRIMARY KEY (fk_perfil_estimado_turistas, fk_pais_origem, fk_uf_destino)
 );
 
 CREATE TABLE Empresa (
-cnpj CHAR(14),
+cnpj CHAR(14) UNIQUE,
 nome_fantasia VARCHAR(255) NOT NULL,
 razao_social VARCHAR(255) NOT NULL,
 fk_informacao_contato_cadastro INT,
@@ -136,12 +129,20 @@ telefone VARCHAR(11) NOT NULL,
 fk_cnpj CHAR(14) NOT NULL,
 fk_informacao_contato_cadastro INT,
 fk_uf_sigla CHAR(2),
-fk_usuario INT,
 CONSTRAINT FOREIGN KEY (fk_cnpj) REFERENCES Empresa (cnpj),
 CONSTRAINT FOREIGN KEY (fk_informacao_contato_cadastro) REFERENCES Informacao_Contato_Cadastro (id_informacao_contato_cadastro),
 CONSTRAINT FOREIGN KEY (fk_uf_sigla) REFERENCES Unidade_Federativa_Brasil (sigla),
-CONSTRAINT FOREIGN KEY (fk_usuario) REFERENCES Usuario (id_usuario),
-PRIMARY KEY (id_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla, fk_usuario)
+PRIMARY KEY (id_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla)
+);
+
+CREATE TABLE Usuario (
+id_usuario INT PRIMARY KEY AUTO_INCREMENT,
+fk_funcionario INT,
+email VARCHAR(255) NOT NULL UNIQUE,
+senha CHAR(12) NOT NULL,
+permissao VARCHAR(45) NOT NULL,
+CONSTRAINT chk_permissao CHECK (permissao IN ('Admin', 'Padrão')),
+CONSTRAINT FOREIGN KEY (fk_funcionario) REFERENCES Funcionario (id_funcionario)
 );
 
 CREATE TABLE Historico_Contato (
