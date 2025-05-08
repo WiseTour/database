@@ -29,7 +29,7 @@ id_informacao_contato_cadastro INT PRIMARY KEY AUTO_INCREMENT,
 email VARCHAR(255) NOT NULL,
 telefone VARCHAR(11) NOT NULL,
 nome VARCHAR(255) NOT NULL,
-fidelizado VARCHAR(255) NOT NULL,
+fidelizado VARCHAR(255),
 CONSTRAINT chk_fidelizado CHECK (fidelizado IN ('Sim', 'Não'))
 );
 
@@ -138,7 +138,7 @@ PRIMARY KEY (id_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigl
 CREATE TABLE Usuario (
 id_usuario INT PRIMARY KEY AUTO_INCREMENT,
 fk_funcionario INT,
-email VARCHAR(255) NOT NULL,
+email VARCHAR(255) NOT NULL UNIQUE,
 senha CHAR(12) NOT NULL,
 permissao VARCHAR(45) NOT NULL,
 CONSTRAINT chk_permissao CHECK (permissao IN ('Admin', 'Padrão')),
