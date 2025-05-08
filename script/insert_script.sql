@@ -32,10 +32,23 @@ VALUES
 ('OF', 'Outras Unidades da Federação', null);
 
 INSERT INTO Usuario (email, senha, permissao)
-VALUES ('adminm', 'admin123', 'admin'),
+VALUES ('admin', 'admin123', 'admin'),
 ('leonardo.sardinha@outlook.com', 'urubu100', 'padrao'),
 ('ian.medeiros@outlook.com', 'urubu100', 'padrao'),
 ('luana.liriel@outlook.com', 'urubu100', 'padrao'),
 ('kenner.lima@outlook.com', 'urubu100', 'padrao'),
 ('phelipe.bruione@outlook.com', 'urubu100', 'padrao'),
 ('samara.damaceno@outlook.com', 'urubu100', 'padrao');
+
+
+INSERT INTO Informacao_Contato_Cadastro (
+    email,
+    telefone,
+    nome,
+    fidelizado
+) VALUES (
+    'wisetour@outlook.com',
+    '000000000',
+    'WiseTour',
+    'Sim'
+);
