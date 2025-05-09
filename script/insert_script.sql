@@ -52,3 +52,13 @@ INSERT INTO Informacao_Contato_Cadastro (
     'WiseTour',
     'Sim'
 );
+
+INSERT INTO Log_Categoria (categoria) VALUES
+('Erro'),
+('Aviso'),
+('Sucesso');
+
+INSERT INTO Etapa (etapa) VALUES
+('Extração'),
+('Tratamento'),
+('Carregamento');
