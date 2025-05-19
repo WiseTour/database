@@ -46,27 +46,13 @@ categoria VARCHAR(45) NOT NULL,
 CONSTRAINT chk_categoria CHECK (categoria IN('Erro', 'Aviso', 'Sucesso'))
 );
 
-CREATE TABLE Chegada_Turistas_Internacionais_Brasil_Mensal (
-id_chegadas_turistas_internacionais_brasil_mensal INT AUTO_INCREMENT,
-mes INT NOT NULL,
-ano INT NOT NULL,
-chegadas INT NOT NULL,
-via_acesso VARCHAR(45) NOT NULL,
-fk_uf_destino CHAR(2),
-fk_fonte_dados INT,
-fk_pais_origem INT,
-CONSTRAINT FOREIGN KEY (fk_uf_destino) REFERENCES Unidade_Federativa_Brasil (sigla),
-CONSTRAINT FOREIGN KEY (fk_fonte_dados) REFERENCES Fonte_Dados (id_fonte_dados),
-CONSTRAINT FOREIGN KEY (fk_pais_origem) REFERENCES Pais (id_pais),
-PRIMARY KEY (id_chegadas_turistas_internacionais_brasil_mensal, fk_uf_destino, fk_fonte_dados, fk_pais_origem)
-);
 
 CREATE TABLE Perfil_Estimado_Turistas (
 id_perfil_estimado_turistas INT AUTO_INCREMENT,
 fk_pais_origem INT,
 fk_uf_entrada CHAR(2),
 ano INT NOT NULL,
-mes INT,
+mes INT NOT NULL,
 quantidade_turistas INT NOT NULL,
 genero VARCHAR(45),
 faixa_etaria VARCHAR(45),
