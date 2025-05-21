@@ -218,7 +218,7 @@ perfil_turista_ativo CHAR(3) NOT NULL,
 temporadas_ativo CHAR(3) NOT NULL,
 oportunidades_investimento_marketing_ativo CHAR(3) NOT NULL,
 CONSTRAINT FOREIGN KEY (fk_usuario, fk_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla) 
-        REFERENCES Usuario (id_usuario, fk_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla),
+        REFERENCES usuario (id_usuario, fk_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla),
 CONSTRAINT chk_ativo_perfil_turista CHECK (perfil_turista_ativo IN ('Sim', 'Não')),
 CONSTRAINT chk_ativo_temporadas CHECK (temporadas_ativo IN ('Sim', 'Não')),
 CONSTRAINT chk_ativo_oportunidades CHECK (oportunidades_investimento_marketing_ativo IN ('Sim', 'Não')),
