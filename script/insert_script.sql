@@ -31,32 +31,6 @@ VALUES
 ('TO', 'Tocantins', 'Norte'),
 ('OF', 'Outras Unidades da Federação', null);
 
--- 1. Criar ou atualizar tabela Funcionario (sem FKs)
-CREATE TABLE Funcionario (
-    id_funcionario INT PRIMARY KEY AUTO_INCREMENT,
-    nome VARCHAR(100),
-    cargo VARCHAR(50),
-    data_admissao DATE,
-    salario DECIMAL(10, 2)
-);
-
--- 2. Atualizar tabela Usuario com todas as FKs do funcionário
-CREATE TABLE Usuario (
-    id_usuario INT PRIMARY KEY AUTO_INCREMENT,
-    login VARCHAR(50),
-    senha VARCHAR(100),
-    permissao VARCHAR(20),
-    fk_id_funcionario INT,
-    fk_cnpj CHAR(14),
-    fk_uf_sigla CHAR(2),
-    fk_informacao_contato_cadastro INT,
-    FOREIGN KEY (fk_id_funcionario) REFERENCES Funcionario(id_funcionario),
-    FOREIGN KEY (fk_cnpj) REFERENCES Empresa(cnpj),
-    FOREIGN KEY (fk_uf_sigla) REFERENCES Unidade_Federativa_Brasil(sigla),
-    FOREIGN KEY (fk_informacao_contato_cadastro) REFERENCES Informacao_Contato_Cadastro(id_informacao_contato_cadastro)
-);
-
-
 
 -- 2. Informação de contato
 INSERT INTO Informacao_Contato_Cadastro (
