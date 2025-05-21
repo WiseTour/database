@@ -137,13 +137,18 @@ PRIMARY KEY (id_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigl
 );
 
 CREATE TABLE Usuario (
-id_usuario INT PRIMARY KEY AUTO_INCREMENT,
+id_usuario INT AUTO_INCREMENT,
 fk_funcionario INT,
+fk_cnpj CHAR(14) NOT NULL,
+fk_informacao_contato_cadastro INT,
+fk_uf_sigla CHAR(2),
 email VARCHAR(255) NOT NULL UNIQUE,
 senha CHAR(12) NOT NULL,
 permissao VARCHAR(45) NOT NULL,
 CONSTRAINT chk_permissao CHECK (permissao IN ('Admin', 'Padrão')),
-CONSTRAINT FOREIGN KEY (fk_funcionario) REFERENCES Funcionario (id_funcionario)
+CONSTRAINT FOREIGN KEY (fk_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla) 
+        REFERENCES Funcionario (id_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla),
+PRIMARY KEY (id_usuario, fk_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla)
 );
 
 CREATE TABLE Historico_Contato (
@@ -196,12 +201,17 @@ PRIMARY KEY (fk_log_categoria_ETL, fk_configuracao_slack, fk_usuario)
 CREATE TABLE Preferencias_Visualizacao_Dashboard (
 id_Preferencias_Visualizacao_Dashboard INT AUTO_INCREMENT,
 fk_usuario INT,
+fk_funcionario INT,
+fk_cnpj CHAR(14) NOT NULL,
+fk_informacao_contato_cadastro INT,
+fk_uf_sigla CHAR(2),
 perfil_turista_ativo CHAR(3) NOT NULL,
 temporadas_ativo CHAR(3) NOT NULL,
 oportunidades_investimento_marketing_ativo CHAR(3) NOT NULL,
-CONSTRAINT FOREIGN KEY (fk_usuario) REFERENCES Usuario (id_usuario),
+CONSTRAINT FOREIGN KEY (fk_usuario, fk_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla) 
+        REFERENCES Usuario (id_usuario, fk_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla),
 CONSTRAINT chk_ativo_perfil_turista CHECK (perfil_turista_ativo IN ('Sim', 'Não')),
 CONSTRAINT chk_ativo_temporadas CHECK (temporadas_ativo IN ('Sim', 'Não')),
 CONSTRAINT chk_ativo_oportunidades CHECK (oportunidades_investimento_marketing_ativo IN ('Sim', 'Não')),
-PRIMARY KEY (id_Preferencias_Visualizacao_Dashboard, fk_usuario)
+PRIMARY KEY (id_Preferencias_Visualizacao_Dashboard, fk_usuario, fk_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla)
 );
