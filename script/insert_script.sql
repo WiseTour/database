@@ -58,7 +58,7 @@ INSERT INTO Funcionario (
 ('Juliana Alves', 'Gerente de Projetos', '11934483566', '12345678000199', 1, 'SP');
 
 -- 5. Usuários com TODAS as FKs
-INSERT INTO Usuario (
+INSERT INTO usuario (
     fk_funcionario, fk_cnpj, fk_uf_sigla, fk_informacao_contato_cadastro, email, senha, permissao
 ) VALUES
 (1, '12345678000199', 'SP', 1, 'leonardo.sardinha@outlook.com', 'urubu100', 'padrao'),
