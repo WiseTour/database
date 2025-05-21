@@ -145,7 +145,7 @@ fk_uf_sigla CHAR(2),
 email VARCHAR(255) NOT NULL UNIQUE,
 senha CHAR(12) NOT NULL,
 permissao VARCHAR(45) NOT NULL,
-CONSTRAINT chk_permissao CHECK (permissao IN ('Admin', 'Padrão')),
+CONSTRAINT chk_permissao CHECK (permissao IN ('Admin', 'Padrao')),
 CONSTRAINT FOREIGN KEY (fk_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla) 
         REFERENCES Funcionario (id_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla),
 PRIMARY KEY (id_usuario, fk_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla)
