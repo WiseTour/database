@@ -188,7 +188,7 @@ slack_username VARCHAR(255) NULL,
 canal_padrao VARCHAR(255) NULL,
 ativo CHAR(3) NOT NULL,
 CONSTRAINT FOREIGN KEY (fk_usuario, fk_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla) 
-        REFERENCES Usuario (id_usuario, fk_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla),
+        REFERENCES usuario (id_usuario, fk_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla),
 CONSTRAINT chk_ativo CHECK (ativo IN ('Sim', 'Não')),
 PRIMARY KEY (id_configuracao_slack, fk_usuario, fk_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla)
 );
