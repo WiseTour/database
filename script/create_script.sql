@@ -202,9 +202,8 @@ fk_cnpj CHAR(14) NOT NULL,
 fk_informacao_contato_cadastro INT,
 fk_uf_sigla CHAR(2),
 CONSTRAINT FOREIGN KEY (fk_log_categoria_ETL) REFERENCES Log_Categoria (id_log_categoria_ETL),
-CONSTRAINT FOREIGN KEY (fk_configuracao_slack) REFERENCES Configuracao_Slack (id_configuracao_slack),
-CONSTRAINT FOREIGN KEY (fk_usuario, fk_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla) 
-        REFERENCES Usuario (id_usuario, fk_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla),
+CONSTRAINT FOREIGN KEY (fk_configuracao_slack, fk_usuario, fk_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla) 
+    REFERENCES Configuracao_Slack (id_configuracao_slack, fk_usuario, fk_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla),
 PRIMARY KEY (fk_log_categoria_ETL, fk_configuracao_slack, fk_usuario, fk_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla)
 );
 
