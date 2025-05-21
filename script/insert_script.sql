@@ -1,4 +1,16 @@
+USE WiseTour;
 
+INSERT IGNORE INTO Unidade_Federativa_Brasil (sigla, unidade_federativa, regiao)
+VALUES
+('AC', 'Acre', 'Norte'),
+('AL', 'Alagoas', 'Nordeste'),
+('AP', 'Amapá', 'Norte'),
+('AM', 'Amazonas', 'Norte'),
+('BA', 'Bahia', 'Nordeste'),
+('CE', 'Ceará', 'Nordeste'),
+('DF', 'Distrito Federal', 'Centro-Oeste'),
+('ES', 'Espírito Santo', 'Sudeste'),
+('GO', 'Goiás', 'Centro-Oeste'),
 ('MA', 'Maranhão', 'Nordeste'),
 ('MT', 'Mato Grosso', 'Centro-Oeste'),
 ('MS', 'Mato Grosso do Sul', 'Centro-Oeste'),
