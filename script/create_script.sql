@@ -83,13 +83,14 @@ PRIMARY KEY (id_perfil_estimado_turistas, fk_pais_origem, fk_uf_entrada)
 );
 
 CREATE TABLE Perfil_Estimado_Turista_Fonte (
-fk_fonte INT,
-fk_perfil_estimado_turistas INT,
-fk_pais_origem INT,
-CONSTRAINT FOREIGN KEY (fk_fonte) REFERENCES Fonte_Dados (id_fonte_dados),
-CONSTRAINT FOREIGN KEY (fk_perfil_estimado_turistas) REFERENCES Perfil_Estimado_Turistas (id_perfil_estimado_turistas),
-CONSTRAINT FOREIGN KEY (fk_pais_origem) REFERENCES Pais (id_pais),
-PRIMARY KEY (fk_fonte, fk_perfil_estimado_turistas, fk_pais_origem)
+    fk_fonte INT,
+    fk_perfil_estimado_turistas INT,
+    fk_pais_origem INT,
+    fk_uf_entrada CHAR(2),
+    CONSTRAINT FOREIGN KEY (fk_fonte) REFERENCES Fonte_Dados (id_fonte_dados),
+    CONSTRAINT FOREIGN KEY (fk_perfil_estimado_turistas, fk_pais_origem, fk_uf_entrada)
+        REFERENCES Perfil_Estimado_Turistas (id_perfil_estimado_turistas, fk_pais_origem, fk_uf_entrada),
+    PRIMARY KEY (fk_fonte, fk_perfil_estimado_turistas, fk_pais_origem, fk_uf_entrada)
 );
 
 CREATE TABLE Destinos (
