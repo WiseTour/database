@@ -61,7 +61,7 @@ INSERT INTO Funcionario (
 INSERT INTO Usuario (
     fk_funcionario, fk_cnpj, fk_uf_sigla, fk_informacao_contato_cadastro, email, senha, permissao
 ) VALUES
-(1, '12345678000199', 'SP', 1, 'leonardo.sardinha@outlook.com', 'urubu100', 'Padrao'),
+(1, '12345678000199', 'SP', 1, 'leonardo.sardinha@outlook.com', 'urubu100', 'Padrão'),
 (1, '12345678000199', 'SP', 1, 'juliana.alves@outlook.com', 'admin123', 'Admin');
 
 INSERT INTO Log_Categoria (categoria) VALUES
