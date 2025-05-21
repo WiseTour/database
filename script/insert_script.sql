@@ -31,112 +31,65 @@ VALUES
 ('TO', 'Tocantins', 'Norte'),
 ('OF', 'Outras Unidades da Federação', null);
 
--- 2. Inserir informação de contato/cadastro
+-- 1. Criar ou atualizar tabela Funcionario (sem FKs)
+CREATE TABLE Funcionario (
+    id_funcionario INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(100),
+    cargo VARCHAR(50),
+    data_admissao DATE,
+    salario DECIMAL(10, 2)
+);
+
+-- 2. Atualizar tabela Usuario com todas as FKs do funcionário
+CREATE TABLE Usuario (
+    id_usuario INT PRIMARY KEY AUTO_INCREMENT,
+    login VARCHAR(50),
+    senha VARCHAR(100),
+    permissao VARCHAR(20),
+    fk_id_funcionario INT,
+    fk_cnpj CHAR(14),
+    fk_uf_sigla CHAR(2),
+    fk_informacao_contato_cadastro INT,
+    FOREIGN KEY (fk_id_funcionario) REFERENCES Funcionario(id_funcionario),
+    FOREIGN KEY (fk_cnpj) REFERENCES Empresa(cnpj),
+    FOREIGN KEY (fk_uf_sigla) REFERENCES Unidade_Federativa_Brasil(sigla),
+    FOREIGN KEY (fk_informacao_contato_cadastro) REFERENCES Informacao_Contato_Cadastro(id_informacao_contato_cadastro)
+);
+
+
+
+-- 2. Informação de contato
 INSERT INTO Informacao_Contato_Cadastro (
-    email,
-    telefone,
-    celular,
-    endereco,
-    numero,
-    complemento,
-    bairro,
-    cidade,
-    cep
+    email, telefone, celular, endereco, numero, complemento, bairro, cidade, cep
 ) VALUES (
-    'contato@wisetour.com.br',
-    '(11) 3000-0000',
-    '(11) 90000-0000',
-    'Rua das Orquídeas',
-    123,
-    'Sala 7',
-    'Jardins',
-    'São Paulo',
-    '01234-567'
+    'contato@wisetour.com.br', '(11) 3000-0000', '(11) 90000-0000',
+    'Rua das Orquídeas', 123, 'Sala 7', 'Jardins', 'São Paulo', '01234-567'
 );
 
--- 3. Inserir empresa
+-- 3. Empresa
 INSERT INTO Empresa (
-    cnpj,
-    nome_fantasia,
-    razao_social,
-    data_abertura,
-    natureza_juridica,
-    porte,
-    capital_social,
-    opcao_mei,
-    opcao_simples,
-    opcao_simples_exclusao,
-    opcao_mei_exclusao,
-    situacao_cadastral,
-    tipo,
-    fk_informacao_contato_cadastro,
-    fk_uf_sigla
+    cnpj, nome_fantasia, razao_social, data_abertura, natureza_juridica,
+    porte, capital_social, opcao_mei, opcao_simples, opcao_simples_exclusao,
+    opcao_mei_exclusao, situacao_cadastral, tipo, fk_informacao_contato_cadastro, fk_uf_sigla
 ) VALUES (
-    '12345678000199',
-    'WiseTour Brasil',
-    'WiseTour Análise e Sistemas Ltda',
-    '2020-01-10',
-    'Sociedade Empresária Limitada',
-    'Pequeno',
-    50000.00,
-    'Não',
-    'Sim',
-    NULL,
-    NULL,
-    'Ativa',
-    'Matriz',
-    1,
-    'SP'
+    '12345678000199', 'WiseTour Brasil', 'WiseTour Análise e Sistemas Ltda', '2020-01-10',
+    'Sociedade Empresária Limitada', 'Pequeno', 50000.00, 'Não', 'Sim', NULL, NULL,
+    'Ativa', 'Matriz', 1, 'SP'
 );
 
--- 4. Inserir funcionários
+-- 4. Funcionários (sem FKs)
 INSERT INTO Funcionario (
-    nome,
-    cargo,
-    data_admissao,
-    salario,
-    fk_cnpj,
-    fk_uf_sigla,
-    fk_informacao_contato_cadastro
-) VALUES 
-(
-    'Leonardo Sardinha',
-    'Analista de Sistemas',
-    '2023-02-01',
-    5500.00,
-    '12345678000199',
-    'SP',
-    1
-),
-(
-    'Juliana Alves',
-    'Gerente de Projetos',
-    '2022-08-15',
-    7200.00,
-    '12345678000199',
-    'SP',
-    1
-);
+    nome, cargo, data_admissao, salario
+) VALUES
+('Leonardo Sardinha', 'Analista de Sistemas', '2023-02-01', 5500.00),
+('Juliana Alves', 'Gerente de Projetos', '2022-08-15', 7200.00);
 
--- 5. Inserir usuários (associados aos funcionários)
+-- 5. Usuários com TODAS as FKs
 INSERT INTO Usuario (
-    login,
-    senha,
-    permissao,
-    fk_id_funcionario
-) VALUES 
-(
-    'leonardo.sardinha',
-    'senha123',
-    'ADMIN',
-    1
-),
-(
-    'juliana.alves',
-    'senha456',
-    'PADRAO',
-    2
-);
+    login, senha, permissao, fk_id_funcionario, fk_cnpj, fk_uf_sigla, fk_informacao_contato_cadastro
+) VALUES
+('leonardo.sardinha', 'senha123', 'ADMIN', 1, '12345678000199', 'SP', 1),
+('juliana.alves', 'senha456', 'PADRAO', 2, '12345678000199', 'SP', 1);
 
 INSERT INTO Log_Categoria (categoria) VALUES
 ('Erro'),
