@@ -179,23 +179,33 @@ PRIMARY KEY (id_log, fk_fonte, fk_log_categoria, fk_etapa)
 CREATE TABLE Configuracao_Slack (
 id_configuracao_slack INT AUTO_INCREMENT,
 fk_usuario INT,
+fk_funcionario INT,
+fk_cnpj CHAR(14) NOT NULL,
+fk_informacao_contato_cadastro INT,
+fk_uf_sigla CHAR(2),
 slack_user_id VARCHAR(45) NULL,
 slack_username VARCHAR(255) NULL,
 canal_padrao VARCHAR(255) NULL,
 ativo CHAR(3) NOT NULL,
-CONSTRAINT FOREIGN KEY (fk_usuario) REFERENCES Usuario (id_usuario),
+CONSTRAINT FOREIGN KEY (fk_usuario, fk_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla) 
+        REFERENCES Usuario (id_usuario, fk_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla),
 CONSTRAINT chk_ativo CHECK (ativo IN ('Sim', 'Não')),
-PRIMARY KEY (id_configuracao_slack, fk_usuario)
+PRIMARY KEY (id_configuracao_slack, fk_usuario, fk_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla)
 );
 
 CREATE TABLE Tipo_notificacao_dados (
 fk_log_categoria_ETL INT,
 fk_configuracao_slack INT,
 fk_usuario INT,
+fk_funcionario INT,
+fk_cnpj CHAR(14) NOT NULL,
+fk_informacao_contato_cadastro INT,
+fk_uf_sigla CHAR(2),
 CONSTRAINT FOREIGN KEY (fk_log_categoria_ETL) REFERENCES Log_Categoria (id_log_categoria_ETL),
 CONSTRAINT FOREIGN KEY (fk_configuracao_slack) REFERENCES Configuracao_Slack (id_configuracao_slack),
-CONSTRAINT FOREIGN KEY (fk_usuario) REFERENCES Usuario (id_usuario),
-PRIMARY KEY (fk_log_categoria_ETL, fk_configuracao_slack, fk_usuario)
+CONSTRAINT FOREIGN KEY (fk_usuario, fk_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla) 
+        REFERENCES Usuario (id_usuario, fk_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla),
+PRIMARY KEY (fk_log_categoria_ETL, fk_configuracao_slack, fk_usuario, fk_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla)
 );
 
 CREATE TABLE Preferencias_Visualizacao_Dashboard (
