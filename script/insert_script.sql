@@ -36,7 +36,7 @@ VALUES
 INSERT INTO Informacao_Contato_Cadastro (
     email, telefone, nome, fidelizado
 ) VALUES (
-    'contato@wisetour.com.br', '(11) 3000-0000', 'joão', 'Sim'
+    'contato@wisetour.com.br', '11934483566', 'joão', 'Sim'
 );
 
 -- 3. Empresa
@@ -54,12 +54,12 @@ INSERT INTO Empresa (
 INSERT INTO Funcionario (
     nome, cargo, telefone, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla
 ) VALUES
-('Leonardo Sardinha', 'Analista de Sistemas', '11934483566', '12345678000199', 1), 'SP',
+('Leonardo Sardinha', 'Analista de Sistemas', '11934483566', '12345678000199', 1, 'SP'),
 ('Juliana Alves', 'Gerente de Projetos', '11934483566', '12345678000199', 1, 'SP');
 
 -- 5. Usuários com TODAS as FKs
 INSERT INTO Usuario (
-    fk_funcionario, fk_cnpj, fk_uf_sigla, fk_informacao_contato_cadastro, email, senha, permissao,
+    fk_funcionario, fk_cnpj, fk_uf_sigla, fk_informacao_contato_cadastro, email, senha, permissao
 ) VALUES
 (1, '12345678000199', 'SP', 1, 'leonardo.sardinha', 'admin123', 'Admin'),
 (1, '12345678000199', 'SP', 1, 'juliana.alves', 'urubu100', 'Admin');
