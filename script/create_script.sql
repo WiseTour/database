@@ -1,5 +1,3 @@
-CREATE DATABASE WiseTour;
-
 USE WiseTour;
 
 CREATE TABLE Unidade_Federativa_Brasil (
