@@ -127,7 +127,7 @@ fk_funcionario INT,
 email VARCHAR(255) NOT NULL UNIQUE,
 senha CHAR(12) NOT NULL,
 permissao VARCHAR(45) NOT NULL,
-CONSTRAINT chk_permissao CHECK (permissao IN ('Admin', 'Padrão')),
+CONSTRAINT chk_permissao CHECK (permissao IN ('admin', 'padrão', 'gerente')),
 CONSTRAINT FOREIGN KEY (fk_funcionario) REFERENCES Funcionario (id_funcionario)
 );
 
