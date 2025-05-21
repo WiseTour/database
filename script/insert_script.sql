@@ -41,28 +41,28 @@ INSERT INTO Informacao_Contato_Cadastro (
 
 -- 3. Empresa
 INSERT INTO Empresa (
-    cnpj, nome_fantasia, razao_social, data_abertura, natureza_juridica,
-    porte, capital_social, opcao_mei, opcao_simples, opcao_simples_exclusao,
-    opcao_mei_exclusao, situacao_cadastral, tipo, fk_informacao_contato_cadastro, fk_uf_sigla
+  cnpj, nome_fantasia, razao_social, fk_informacao_contato_cadastro,
+  cep, tipo_logradouro, nome_logradouro, numero, complemento,
+  bairro, cidade, fk_uf_sigla
 ) VALUES (
-    '12345678000199', 'WiseTour Brasil', 'WiseTour Análise e Sistemas Ltda', '2020-01-10',
-    'Sociedade Empresária Limitada', 'Pequeno', 50000.00, 'Não', 'Sim', NULL, NULL,
-    'Ativa', 'Matriz', 1, 'SP'
+  '12345678000199', 'WiseTour', 'WiseTour Tecnologia em Dados Ltda', 1,
+  '01001000', 'Avenida', 'Paulista', 1000, 'Conjunto 101',
+  'Bela Vista', 'São Paulo', 'SP'
 );
 
 -- 4. Funcionários (sem FKs)
 INSERT INTO Funcionario (
-    nome, cargo, data_admissao, salario
+    nome, cargo, telefone, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla
 ) VALUES
-('Leonardo Sardinha', 'Analista de Sistemas', '2023-02-01', 5500.00),
-('Juliana Alves', 'Gerente de Projetos', '2022-08-15', 7200.00);
+('Leonardo Sardinha', 'Analista de Sistemas', '11934483566', '12345678000199', 1), 'SP',
+('Juliana Alves', 'Gerente de Projetos', '11934483566', '12345678000199', 1, 'SP');
 
 -- 5. Usuários com TODAS as FKs
 INSERT INTO Usuario (
-    login, senha, permissao, fk_id_funcionario, fk_cnpj, fk_uf_sigla, fk_informacao_contato_cadastro
+    fk_funcionario, fk_cnpj, fk_uf_sigla, fk_informacao_contato_cadastro, email, senha, permissao,
 ) VALUES
-('leonardo.sardinha', 'senha123', 'ADMIN', 1, '12345678000199', 'SP', 1),
-('juliana.alves', 'senha456', 'PADRAO', 2, '12345678000199', 'SP', 1);
+(1, '12345678000199', 'SP', 1, 'leonardo.sardinha', 'admin123', 'Admin'),
+(1, '12345678000199', 'SP', 1, 'juliana.alves', 'urubu100', 'Admin');
 
 INSERT INTO Log_Categoria (categoria) VALUES
 ('Erro'),
