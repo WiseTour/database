@@ -95,12 +95,13 @@ CREATE TABLE Destinos (
 fk_perfil_estimado_turistas INT,
 fk_pais_origem INT,
 fk_uf_destino CHAR(2),
+fk_uf_entrada CHAR(2),
 permanencia_media DOUBLE NOT NULL,
-CONSTRAINT FOREIGN KEY (fk_perfil_estimado_turistas, fk_pais_origem, fk_uf_entrada)
-        REFERENCES Perfil_Estimado_Turistas (id_perfil_estimado_turistas, fk_pais_origem, fk_uf_entrada),
 CONSTRAINT FOREIGN KEY (fk_pais_origem) REFERENCES Pais (id_pais),
+    CONSTRAINT FOREIGN KEY (fk_perfil_estimado_turistas, fk_pais_origem, fk_uf_entrada)
+        REFERENCES Perfil_Estimado_Turistas (id_perfil_estimado_turistas, fk_pais_origem, fk_uf_entrada),
 CONSTRAINT FOREIGN KEY (fk_uf_destino) REFERENCES Unidade_Federativa_Brasil (sigla),
-PRIMARY KEY (fk_perfil_estimado_turistas, fk_pais_origem, fk_uf_destino)
+PRIMARY KEY (fk_perfil_estimado_turistas, fk_pais_origem, fk_uf_destino, fk_uf_entrada)
 );
 
 CREATE TABLE Empresa (
