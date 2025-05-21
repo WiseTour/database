@@ -34,10 +34,9 @@ VALUES
 
 -- 2. Informação de contato
 INSERT INTO Informacao_Contato_Cadastro (
-    email, telefone, celular, endereco, numero, complemento, bairro, cidade, cep
+    email, telefone, nome, fidelizado
 ) VALUES (
-    'contato@wisetour.com.br', '(11) 3000-0000', '(11) 90000-0000',
-    'Rua das Orquídeas', 123, 'Sala 7', 'Jardins', 'São Paulo', '01234-567'
+    'contato@wisetour.com.br', '(11) 3000-0000', 'joão', 'Sim'
 );
 
 -- 3. Empresa
