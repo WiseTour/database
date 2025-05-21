@@ -31,26 +31,111 @@ VALUES
 ('TO', 'Tocantins', 'Norte'),
 ('OF', 'Outras Unidades da Federação', null);
 
-INSERT INTO Usuario (email, senha, permissao)
-VALUES ('admin', 'admin123', 'admin'),
-('leonardo.sardinha@outlook.com', 'urubu100', 'padrao'),
-('ian.medeiros@outlook.com', 'urubu100', 'padrao'),
-('luana.liriel@outlook.com', 'urubu100', 'padrao'),
-('kenner.lima@outlook.com', 'urubu100', 'padrao'),
-('phelipe.bruione@outlook.com', 'urubu100', 'padrao'),
-('samara.damaceno@outlook.com', 'urubu100', 'padrao');
-
-
+-- 2. Inserir informação de contato/cadastro
 INSERT INTO Informacao_Contato_Cadastro (
     email,
     telefone,
-    nome,
-    fidelizado
+    celular,
+    endereco,
+    numero,
+    complemento,
+    bairro,
+    cidade,
+    cep
 ) VALUES (
-    'wisetour@outlook.com',
-    '000000000',
-    'WiseTour',
-    'Sim'
+    'contato@wisetour.com.br',
+    '(11) 3000-0000',
+    '(11) 90000-0000',
+    'Rua das Orquídeas',
+    123,
+    'Sala 7',
+    'Jardins',
+    'São Paulo',
+    '01234-567'
+);
+
+-- 3. Inserir empresa
+INSERT INTO Empresa (
+    cnpj,
+    nome_fantasia,
+    razao_social,
+    data_abertura,
+    natureza_juridica,
+    porte,
+    capital_social,
+    opcao_mei,
+    opcao_simples,
+    opcao_simples_exclusao,
+    opcao_mei_exclusao,
+    situacao_cadastral,
+    tipo,
+    fk_informacao_contato_cadastro,
+    fk_uf_sigla
+) VALUES (
+    '12345678000199',
+    'WiseTour Brasil',
+    'WiseTour Análise e Sistemas Ltda',
+    '2020-01-10',
+    'Sociedade Empresária Limitada',
+    'Pequeno',
+    50000.00,
+    'Não',
+    'Sim',
+    NULL,
+    NULL,
+    'Ativa',
+    'Matriz',
+    1,
+    'SP'
+);
+
+-- 4. Inserir funcionários
+INSERT INTO Funcionario (
+    nome,
+    cargo,
+    data_admissao,
+    salario,
+    fk_cnpj,
+    fk_uf_sigla,
+    fk_informacao_contato_cadastro
+) VALUES 
+(
+    'Leonardo Sardinha',
+    'Analista de Sistemas',
+    '2023-02-01',
+    5500.00,
+    '12345678000199',
+    'SP',
+    1
+),
+(
+    'Juliana Alves',
+    'Gerente de Projetos',
+    '2022-08-15',
+    7200.00,
+    '12345678000199',
+    'SP',
+    1
+);
+
+-- 5. Inserir usuários (associados aos funcionários)
+INSERT INTO Usuario (
+    login,
+    senha,
+    permissao,
+    fk_id_funcionario
+) VALUES 
+(
+    'leonardo.sardinha',
+    'senha123',
+    'ADMIN',
+    1
+),
+(
+    'juliana.alves',
+    'senha456',
+    'PADRAO',
+    2
 );
 
 INSERT INTO Log_Categoria (categoria) VALUES
