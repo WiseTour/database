@@ -98,55 +98,60 @@ CONSTRAINT FOREIGN KEY (fk_etapa) REFERENCES etapa (id_etapa),
 PRIMARY KEY (id_log, fk_fonte, fk_log_categoria, fk_etapa)
 );
 
+/* USUÁRIO */
+
+CREATE TABLE usuario (
+id_usuario INT AUTO_INCREMENT PRIMARY KEY,
+email VARCHAR(255) NOT NULL UNIQUE,
+senha CHAR(12) NOT NULL,
+permissao VARCHAR(45) NOT NULL,
+CONSTRAINT chk_permissao CHECK (permissao IN ('admin', 'padrao', 'gerente'))
+);
+
 /* CONFIGURACOES E PREFERÊNCIAS DASHBOARD E SLACK */
 
 CREATE TABLE configuracao_slack (
-id_configuracao_slack INT PRIMARY KEY AUTO_INCREMENT,
+id_configuracao_slack INT AUTO_INCREMENT,
+fk_usuario INT,
 slack_user_id VARCHAR(45) NULL,
 slack_username VARCHAR(255) NULL,
 canal_padrao VARCHAR(255) NULL,
 ativo CHAR(3) NOT NULL,
-CONSTRAINT chk_ativo CHECK (ativo IN ('sim', 'nao'))
+CONSTRAINT chk_ativo CHECK (ativo IN ('sim', 'nao')),
+CONSTRAINT FOREIGN KEY (fk_usuario) REFERENCES usuario (id_usuario),
+PRIMARY KEY (id_configuracao_slack, fk_usuario)
 );
 
 CREATE TABLE tipo_notificacao_dados (
 fk_log_categoria INT,
 fk_configuracao_slack INT,
+fk_usuario INT,
 CONSTRAINT FOREIGN KEY (fk_log_categoria) REFERENCES log_categoria (id_log_categoria),
 CONSTRAINT FOREIGN KEY (fk_configuracao_slack) REFERENCES configuracao_slack (id_configuracao_slack),
-PRIMARY KEY (fk_log_categoria, fk_configuracao_slack)
+CONSTRAINT FOREIGN KEY (fk_usuario) REFERENCES usuario (id_usuario),
+PRIMARY KEY (fk_log_categoria, fk_configuracao_slack, fk_usuario)
 );
 
 CREATE TABLE preferencias_visualizacao_dashboard (
-id_preferencias_visualizacao_dashboard INT AUTO_INCREMENT PRIMARY KEY,
+id_preferencias_visualizacao_dashboard INT AUTO_INCREMENT,
+fk_usuario int,
 ativo CHAR(3) NOT NULL,
-CONSTRAINT chk_ativo_preferencias_visualizacao_dashboard CHECK (ativo IN ('sim', 'nao'))
+CONSTRAINT chk_ativo_preferencias_visualizacao_dashboard CHECK (ativo IN ('sim', 'nao')),
+CONSTRAINT FOREIGN KEY (fk_usuario) REFERENCES usuario (id_usuario),
+PRIMARY KEY (id_preferencias_visualizacao_dashboard, fk_usuario)
 );
 
 CREATE TABLE tela_dashboard (
 id_tela_dashboard INT AUTO_INCREMENT,
 fk_preferencias_visualizacao_dashboard INT,
+fk_usuario INT,
 tela VARCHAR(13) NOT NULL,
 ativo CHAR(3) NOT NULL,
 CONSTRAINT chk_tela CHECK (tela IN ('sazonalidade', 'perfilTurista', 'panoramaGeral')),
 CONSTRAINT chk_ativo_tela_dashboard CHECK (ativo IN ('sim', 'nao')),
 CONSTRAINT FOREIGN KEY (fk_preferencias_visualizacao_dashboard) REFERENCES preferencias_visualizacao_dashboard (id_preferencias_visualizacao_dashboard),
-PRIMARY KEY (id_tela_dashboard, fk_preferencias_visualizacao_dashboard)
-);
-
-/* USUÁRIO */
-
-CREATE TABLE usuario (
-id_usuario INT AUTO_INCREMENT,
-pk_configuracao_slack INT,
-pk_preferencias_visualizacao_dashboard INT,
-email VARCHAR(255) NOT NULL UNIQUE,
-senha CHAR(12) NOT NULL,
-permissao VARCHAR(45) NOT NULL,
-CONSTRAINT chk_permissao CHECK (permissao IN ('admin', 'padrao', 'gerente')),
-CONSTRAINT FOREIGN KEY (pk_configuracao_slack) REFERENCES configuracao_slack (id_configuracao_slack),
-CONSTRAINT FOREIGN KEY (pk_preferencias_visualizacao_dashboard) REFERENCES preferencias_visualizacao_dashboard (id_preferencias_visualizacao_dashboard),
-PRIMARY KEY (id_usuario, pk_configuracao_slack, pk_preferencias_visualizacao_dashboard)
+CONSTRAINT FOREIGN KEY (fk_usuario) REFERENCES usuario (id_usuario),
+PRIMARY KEY (id_tela_dashboard, fk_preferencias_visualizacao_dashboard, fk_usuario)
 );
 
 /* EMPRESA */
@@ -170,7 +175,7 @@ CONSTRAINT FOREIGN KEY (fk_informacao_contato_cadastro) REFERENCES informacao_co
 );
 
 CREATE TABLE endereco (
-id_endereco INT UNIQUE,
+id_endereco INT AUTO_INCREMENT UNIQUE,
 cep CHAR(8) NOT NULL,
 tipo_logradouro VARCHAR(45) NOT NULL,
 nome_logradouro VARCHAR(45) NOT NULL,
@@ -203,16 +208,12 @@ fk_cnpj CHAR(14) NOT NULL,
 fk_informacao_contato_cadastro INT,
 fk_uf_sigla CHAR(2),
 fk_endereco INT,
-pk_usuario INT,
-pk_configuracao_slack INT,
-fk_preferencias_visualizacao_dashboard INT,
+fk_usuario INT,
 CONSTRAINT FOREIGN KEY (fk_endereco) REFERENCES endereco (id_endereco),
 CONSTRAINT FOREIGN KEY (fk_cnpj) REFERENCES empresa (cnpj),
 CONSTRAINT FOREIGN KEY (fk_informacao_contato_cadastro) REFERENCES informacao_contato_cadastro (id_informacao_contato_cadastro),
 CONSTRAINT FOREIGN KEY (fk_uf_sigla) REFERENCES unidade_federativa_brasil (sigla),
-CONSTRAINT FOREIGN KEY (pk_usuario) REFERENCES usuario (id_usuario),
-CONSTRAINT FOREIGN KEY (pk_configuracao_slack) REFERENCES configuracao_slack (id_configuracao_slack),
-CONSTRAINT FOREIGN KEY (fk_preferencias_visualizacao_dashboard) REFERENCES preferencias_visualizacao_dashboard (id_preferencias_visualizacao_dashboard),
-PRIMARY KEY (id_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla)
+CONSTRAINT FOREIGN KEY (fk_usuario) REFERENCES usuario (id_usuario),
+PRIMARY KEY (id_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla, fk_endereco, fk_usuario)
 );
 
