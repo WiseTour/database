@@ -1,6 +1,6 @@
 CREATE DATABASE IF NOT EXISTS WiseTour;
 
-USE WISETOUR;
+USE WiseTour;
 
 CREATE TABLE unidade_federativa_brasil (
 sigla CHAR(2) PRIMARY KEY,
@@ -193,8 +193,7 @@ fk_informacao_contato_cadastro INT,
 fk_endereco INT,
 fk_uf_sigla CHAR(2),
 CONSTRAINT FOREIGN KEY (fk_informacao_contato_cadastro) REFERENCES informacao_contato_cadastro (id_informacao_contato_cadastro),
-CONSTRAINT FOREIGN KEY (fk_uf_sigla) REFERENCES unidade_federativa_brasil (sigla),
-CONSTRAINT FOREIGN KEY (fk_endereco) REFERENCES endereco (id_endereco),
+CONSTRAINT FOREIGN KEY (fk_endereco, fk_uf_sigla) REFERENCES endereco (id_endereco, fk_uf_sigla),
 PRIMARY KEY (cnpj, fk_informacao_contato_cadastro, fk_uf_sigla, fk_endereco)
 );
 
