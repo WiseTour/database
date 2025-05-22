@@ -1,20 +1,14 @@
-CREATE DATABASE WiseTour;
-
 USE WiseTour;
 
-CREATE TABLE Unidade_Federativa_Brasil (
+CREATE TABLE unidade_federativa_brasil (
 sigla CHAR(2) PRIMARY KEY,
 unidade_federativa VARCHAR(45) NOT NULL UNIQUE,
 regiao VARCHAR(45)
 );
 
+/* ETL */
 
-CREATE TABLE Pais (
-id_pais INT PRIMARY KEY AUTO_INCREMENT,
-pais VARCHAR(100) NOT NULL UNIQUE
-);
-
-CREATE TABLE Fonte_Dados (
+CREATE TABLE fonte_dados (
 id_fonte_dados INT PRIMARY KEY AUTO_INCREMENT,
 titulo_arquivo_fonte VARCHAR(255) UNIQUE NOT NULL,
 edicao VARCHAR(45) NOT NULL,
@@ -24,30 +18,12 @@ data_coleta DATE NOT NULL,
 observacoes TEXT
 );
 
-CREATE TABLE Informacao_Contato_Cadastro (
-id_informacao_contato_cadastro INT PRIMARY KEY AUTO_INCREMENT,
-email VARCHAR(255) NOT NULL,
-telefone VARCHAR(11) NOT NULL,
-nome VARCHAR(255) NOT NULL,
-fidelizado VARCHAR(255),
-CONSTRAINT chk_fidelizado CHECK (fidelizado IN ('Sim', 'Não'))
+CREATE TABLE pais (
+id_pais INT PRIMARY KEY AUTO_INCREMENT,
+pais VARCHAR(100) NOT NULL UNIQUE
 );
 
-
-CREATE TABLE Etapa (
-idEtapa INT PRIMARY KEY AUTO_INCREMENT,
-etapa VARCHAR(45) NOT NULL,
-CONSTRAINT chk_etapa CHECK (etapa IN ('Extração', 'Tratamento', 'Carregamento'))
-);
-
-CREATE TABLE Log_Categoria (
-id_log_categoria_ETL INT PRIMARY KEY AUTO_INCREMENT,
-categoria VARCHAR(45) NOT NULL,
-CONSTRAINT chk_categoria CHECK (categoria IN('Erro', 'Aviso', 'Sucesso'))
-);
-
-
-CREATE TABLE Perfil_Estimado_Turistas (
+CREATE TABLE perfil_estimado_turistas (
 id_perfil_estimado_turistas INT AUTO_INCREMENT,
 fk_pais_origem INT,
 fk_uf_entrada CHAR(2),
@@ -63,84 +39,50 @@ servico_agencia_turismo INT,
 motivo_viagem VARCHAR(45) NOT NULL,
 motivacao_viagem_lazer VARCHAR(45),
 gasto_media_percapita_em_reais DOUBLE NOT NULL,
-CONSTRAINT FOREIGN KEY (fk_pais_origem) REFERENCES Pais (id_pais),
-CONSTRAINT FOREIGN KEY (fk_uf_entrada) REFERENCES Unidade_Federativa_Brasil (sigla),
+CONSTRAINT FOREIGN KEY (fk_pais_origem) REFERENCES pais (id_pais),
+CONSTRAINT FOREIGN KEY (fk_uf_entrada) REFERENCES unidade_federativa_brasil (sigla),
 PRIMARY KEY (id_perfil_estimado_turistas, fk_pais_origem, fk_uf_entrada)
 );
 
-CREATE TABLE Perfil_Estimado_Turista_Fonte (
-fk_fonte INT,
-fk_perfil_estimado_turistas INT,
-fk_pais_origem INT,
-CONSTRAINT FOREIGN KEY (fk_fonte) REFERENCES Fonte_Dados (id_fonte_dados),
-CONSTRAINT FOREIGN KEY (fk_perfil_estimado_turistas) REFERENCES Perfil_Estimado_Turistas (id_perfil_estimado_turistas),
-CONSTRAINT FOREIGN KEY (fk_pais_origem) REFERENCES Pais (id_pais),
-PRIMARY KEY (fk_fonte, fk_perfil_estimado_turistas, fk_pais_origem)
+CREATE TABLE perfil_estimado_turista_fonte (
+    fk_fonte INT,
+    fk_perfil_estimado_turistas INT,
+    fk_pais_origem INT,
+    fk_uf_entrada CHAR(2),
+    CONSTRAINT FOREIGN KEY (fk_fonte) REFERENCES fonte_dados (id_fonte_dados),
+    CONSTRAINT FOREIGN KEY (fk_perfil_estimado_turistas, fk_pais_origem, fk_uf_entrada)
+        REFERENCES perfil_estimado_turistas (id_perfil_estimado_turistas, fk_pais_origem, fk_uf_entrada),
+    PRIMARY KEY (fk_fonte, fk_perfil_estimado_turistas, fk_pais_origem, fk_uf_entrada)
 );
 
-CREATE TABLE Destinos (
+CREATE TABLE destinos (
 fk_perfil_estimado_turistas INT,
 fk_pais_origem INT,
 fk_uf_destino CHAR(2),
+fk_uf_entrada CHAR(2),
 permanencia_media DOUBLE NOT NULL,
-CONSTRAINT FOREIGN KEY (fk_perfil_estimado_turistas) REFERENCES Perfil_Estimado_Turistas (id_perfil_estimado_turistas),
-CONSTRAINT FOREIGN KEY (fk_pais_origem) REFERENCES Pais (id_pais),
-CONSTRAINT FOREIGN KEY (fk_uf_destino) REFERENCES Unidade_Federativa_Brasil (sigla),
-PRIMARY KEY (fk_perfil_estimado_turistas, fk_pais_origem, fk_uf_destino)
+CONSTRAINT FOREIGN KEY (fk_pais_origem) REFERENCES pais (id_pais),
+    CONSTRAINT FOREIGN KEY (fk_perfil_estimado_turistas, fk_pais_origem, fk_uf_entrada)
+        REFERENCES perfil_estimado_turistas (id_perfil_estimado_turistas, fk_pais_origem, fk_uf_entrada),
+CONSTRAINT FOREIGN KEY (fk_uf_destino) REFERENCES unidade_federativa_brasil (sigla),
+PRIMARY KEY (fk_perfil_estimado_turistas, fk_pais_origem, fk_uf_destino, fk_uf_entrada)
 );
 
-CREATE TABLE Empresa (
-cnpj CHAR(14) UNIQUE,
-nome_fantasia VARCHAR(255) NOT NULL,
-razao_social VARCHAR(255) NOT NULL,
-fk_informacao_contato_cadastro INT,
-cep CHAR(8) NOT NULL,
-tipo_logradouro VARCHAR(45) NOT NULL,
-nome_logradouro VARCHAR(45) NOT NULL,
-numero INT NOT NULL,
-complemento TEXT NULL,
-bairro VARCHAR(100) NOT NULL,
-cidade VARCHAR(100) NOT NULL,
-fk_uf_sigla CHAR(2),
-CONSTRAINT FOREIGN KEY (fk_informacao_contato_cadastro) REFERENCES Informacao_Contato_Cadastro (id_informacao_contato_cadastro),
-CONSTRAINT FOREIGN KEY (fk_uf_sigla) REFERENCES Unidade_Federativa_Brasil (sigla),
-PRIMARY KEY (cnpj, fk_informacao_contato_cadastro, fk_uf_sigla)
+/* LOG */
+
+CREATE TABLE etapa (
+id_etapa INT PRIMARY KEY AUTO_INCREMENT,
+etapa VARCHAR(45) NOT NULL,
+CONSTRAINT chk_etapa CHECK (etapa IN ('extracao', 'tratamento', 'carregamento'))
 );
 
-CREATE TABLE Funcionario (
-id_funcionario INT AUTO_INCREMENT,
-nome VARCHAR(255) NOT NULL,
-cargo VARCHAR(70) NOT NULL,
-telefone VARCHAR(11) NOT NULL,
-fk_cnpj CHAR(14) NOT NULL,
-fk_informacao_contato_cadastro INT,
-fk_uf_sigla CHAR(2),
-CONSTRAINT FOREIGN KEY (fk_cnpj) REFERENCES Empresa (cnpj),
-CONSTRAINT FOREIGN KEY (fk_informacao_contato_cadastro) REFERENCES Informacao_Contato_Cadastro (id_informacao_contato_cadastro),
-CONSTRAINT FOREIGN KEY (fk_uf_sigla) REFERENCES Unidade_Federativa_Brasil (sigla),
-PRIMARY KEY (id_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla)
+CREATE TABLE log_categoria (
+id_log_categoria INT PRIMARY KEY AUTO_INCREMENT,
+categoria VARCHAR(45) NOT NULL,
+CONSTRAINT chk_categoria CHECK (categoria IN('erro', 'aviso', 'sucesso'))
 );
 
-CREATE TABLE Usuario (
-id_usuario INT PRIMARY KEY AUTO_INCREMENT,
-fk_funcionario INT,
-email VARCHAR(255) NOT NULL UNIQUE,
-senha CHAR(12) NOT NULL,
-permissao VARCHAR(45) NOT NULL,
-CONSTRAINT chk_permissao CHECK (permissao IN ('admin', 'padrão', 'gerente')),
-CONSTRAINT FOREIGN KEY (fk_funcionario) REFERENCES Funcionario (id_funcionario)
-);
-
-CREATE TABLE Historico_Contato (
-id_historico_contato INT PRIMARY KEY AUTO_INCREMENT,
-data_contato DATE NOT NULL,
-anotacoes TEXT NOT NULL,
-responsavel VARCHAR(255) NOT NULL,
-fk_informacao_contato_cadastro INT,
-CONSTRAINT FOREIGN KEY (fk_informacao_contato_cadastro) REFERENCES Informacao_Contato_Cadastro (id_informacao_contato_cadastro)
-);
-
-CREATE TABLE Log (
+CREATE TABLE log (
 id_log INT AUTO_INCREMENT,
 fk_fonte INT,
 fk_log_categoria INT,
@@ -150,43 +92,127 @@ data_hora DATETIME NOT NULL,
 quantidade_lida INT NULL,
 quantidade_inserida INT NULL,
 tabela_destino VARCHAR(45) NULL,
-CONSTRAINT FOREIGN KEY (fk_fonte) REFERENCES Fonte_Dados (id_fonte_dados),
-CONSTRAINT FOREIGN KEY (fk_log_categoria) REFERENCES Log_Categoria (id_log_categoria_ETL),
-CONSTRAINT FOREIGN KEY (fk_etapa) REFERENCES Etapa (idEtapa),
+CONSTRAINT FOREIGN KEY (fk_fonte) REFERENCES fonte_dados (id_fonte_dados),
+CONSTRAINT FOREIGN KEY (fk_log_categoria) REFERENCES log_categoria (id_log_categoria),
+CONSTRAINT FOREIGN KEY (fk_etapa) REFERENCES etapa (id_etapa),
 PRIMARY KEY (id_log, fk_fonte, fk_log_categoria, fk_etapa)
 );
 
-CREATE TABLE Configuracao_Slack (
-id_configuracao_slack INT AUTO_INCREMENT,
-fk_usuario INT,
+/* CONFIGURACOES E PREFERÊNCIAS DASHBOARD E SLACK */
+
+CREATE TABLE configuracao_slack (
+id_configuracao_slack INT PRIMARY KEY AUTO_INCREMENT,
 slack_user_id VARCHAR(45) NULL,
 slack_username VARCHAR(255) NULL,
 canal_padrao VARCHAR(255) NULL,
 ativo CHAR(3) NOT NULL,
-CONSTRAINT FOREIGN KEY (fk_usuario) REFERENCES Usuario (id_usuario),
-CONSTRAINT chk_ativo CHECK (ativo IN ('Sim', 'Não')),
-PRIMARY KEY (id_configuracao_slack, fk_usuario)
+CONSTRAINT chk_ativo CHECK (ativo IN ('sim', 'nao'))
 );
 
-CREATE TABLE Tipo_notificacao_dados (
-fk_log_categoria_ETL INT,
+CREATE TABLE tipo_notificacao_dados (
+fk_log_categoria INT,
 fk_configuracao_slack INT,
-fk_usuario INT,
-CONSTRAINT FOREIGN KEY (fk_log_categoria_ETL) REFERENCES Log_Categoria (id_log_categoria_ETL),
-CONSTRAINT FOREIGN KEY (fk_configuracao_slack) REFERENCES Configuracao_Slack (id_configuracao_slack),
-CONSTRAINT FOREIGN KEY (fk_usuario) REFERENCES Usuario (id_usuario),
-PRIMARY KEY (fk_log_categoria_ETL, fk_configuracao_slack, fk_usuario)
+CONSTRAINT FOREIGN KEY (fk_log_categoria) REFERENCES log_categoria (id_log_categoria),
+CONSTRAINT FOREIGN KEY (fk_configuracao_slack) REFERENCES configuracao_slack (id_configuracao_slack),
+PRIMARY KEY (fk_log_categoria, fk_configuracao_slack)
 );
 
-CREATE TABLE Preferencias_Visualizacao_Dashboard (
-id_Preferencias_Visualizacao_Dashboard INT AUTO_INCREMENT,
-fk_usuario INT,
-perfil_turista_ativo CHAR(3) NOT NULL,
-temporadas_ativo CHAR(3) NOT NULL,
-oportunidades_investimento_marketing_ativo CHAR(3) NOT NULL,
-CONSTRAINT FOREIGN KEY (fk_usuario) REFERENCES Usuario (id_usuario),
-CONSTRAINT chk_ativo_perfil_turista CHECK (perfil_turista_ativo IN ('Sim', 'Não')),
-CONSTRAINT chk_ativo_temporadas CHECK (temporadas_ativo IN ('Sim', 'Não')),
-CONSTRAINT chk_ativo_oportunidades CHECK (oportunidades_investimento_marketing_ativo IN ('Sim', 'Não')),
-PRIMARY KEY (id_Preferencias_Visualizacao_Dashboard, fk_usuario)
+CREATE TABLE preferencias_visualizacao_dashboard (
+id_preferencias_visualizacao_dashboard INT AUTO_INCREMENT PRIMARY KEY,
+ativo CHAR(3) NOT NULL,
+CONSTRAINT chk_ativo_preferencias_visualizacao_dashboard CHECK (ativo IN ('sim', 'nao'))
 );
+
+CREATE TABLE tela_dashboard (
+id_tela_dashboard INT AUTO_INCREMENT,
+fk_preferencias_visualizacao_dashboard INT,
+tela VARCHAR(13) NOT NULL,
+ativo CHAR(3) NOT NULL,
+CONSTRAINT chk_tela CHECK (tela IN ('sazonalidade', 'perfilTurista', 'panoramaGeral')),
+CONSTRAINT chk_ativo_tela_dashboard CHECK (ativo IN ('sim', 'nao')),
+CONSTRAINT FOREIGN KEY (fk_preferencias_visualizacao_dashboard) REFERENCES preferencias_visualizacao_dashboard (id_preferencias_visualizacao_dashboard),
+PRIMARY KEY (id_tela_dashboard, fk_preferencias_visualizacao_dashboard)
+);
+
+/* USUÁRIO */
+
+CREATE TABLE usuario (
+id_usuario INT AUTO_INCREMENT,
+pk_configuracao_slack INT,
+pk_preferencias_visualizacao_dashboard INT,
+email VARCHAR(255) NOT NULL UNIQUE,
+senha CHAR(12) NOT NULL,
+permissao VARCHAR(45) NOT NULL,
+CONSTRAINT chk_permissao CHECK (permissao IN ('admin', 'padrao', 'gerente')),
+CONSTRAINT FOREIGN KEY (pk_configuracao_slack) REFERENCES configuracao_slack (id_configuracao_slack),
+CONSTRAINT FOREIGN KEY (pk_preferencias_visualizacao_dashboard) REFERENCES preferencias_visualizacao_dashboard (id_preferencias_visualizacao_dashboard),
+PRIMARY KEY (id_usuario, pk_configuracao_slack, pk_preferencias_visualizacao_dashboard)
+);
+
+/* EMPRESA */
+
+CREATE TABLE informacao_contato_cadastro (
+id_informacao_contato_cadastro INT PRIMARY KEY AUTO_INCREMENT,
+email VARCHAR(255) NOT NULL,
+telefone VARCHAR(11) NOT NULL,
+nome VARCHAR(255) NOT NULL,
+fidelizado VARCHAR(255),
+CONSTRAINT chk_fidelizado CHECK (fidelizado IN ('sim', 'nao'))
+);
+
+CREATE TABLE historico_contato (
+id_historico_contato INT PRIMARY KEY AUTO_INCREMENT,
+data_contato DATE NOT NULL,
+anotacoes TEXT NOT NULL,
+responsavel VARCHAR(255) NOT NULL,
+fk_informacao_contato_cadastro INT,
+CONSTRAINT FOREIGN KEY (fk_informacao_contato_cadastro) REFERENCES informacao_contato_cadastro (id_informacao_contato_cadastro)
+);
+
+CREATE TABLE endereco (
+id_endereco INT UNIQUE,
+cep CHAR(8) NOT NULL,
+tipo_logradouro VARCHAR(45) NOT NULL,
+nome_logradouro VARCHAR(45) NOT NULL,
+numero INT NOT NULL,
+complemento TEXT NULL,
+bairro VARCHAR(100) NOT NULL,
+cidade VARCHAR(100) NOT NULL,
+fk_uf_sigla CHAR(2),
+CONSTRAINT FOREIGN KEY (fk_uf_sigla) REFERENCES unidade_federativa_brasil (sigla),
+PRIMARY KEY (id_endereco, fk_uf_sigla)
+);
+
+CREATE TABLE empresa (
+cnpj CHAR(14) UNIQUE,
+fk_informacao_contato_cadastro INT,
+fk_endereco INT,
+fk_uf_sigla CHAR(2),
+CONSTRAINT FOREIGN KEY (fk_informacao_contato_cadastro) REFERENCES informacao_contato_cadastro (id_informacao_contato_cadastro),
+CONSTRAINT FOREIGN KEY (fk_uf_sigla) REFERENCES unidade_federativa_brasil (sigla),
+CONSTRAINT FOREIGN KEY (fk_endereco) REFERENCES endereco (id_endereco),
+PRIMARY KEY (cnpj, fk_informacao_contato_cadastro, fk_uf_sigla, fk_endereco)
+);
+
+CREATE TABLE funcionario (
+id_funcionario INT AUTO_INCREMENT,
+nome VARCHAR(255) NOT NULL,
+cargo VARCHAR(70) NOT NULL,
+telefone VARCHAR(11) NOT NULL,
+fk_cnpj CHAR(14) NOT NULL,
+fk_informacao_contato_cadastro INT,
+fk_uf_sigla CHAR(2),
+fk_endereco INT,
+pk_usuario INT,
+pk_configuracao_slack INT,
+fk_preferencias_visualizacao_dashboard INT,
+CONSTRAINT FOREIGN KEY (fk_endereco) REFERENCES endereco (id_endereco),
+CONSTRAINT FOREIGN KEY (fk_cnpj) REFERENCES empresa (cnpj),
+CONSTRAINT FOREIGN KEY (fk_informacao_contato_cadastro) REFERENCES informacao_contato_cadastro (id_informacao_contato_cadastro),
+CONSTRAINT FOREIGN KEY (fk_uf_sigla) REFERENCES unidade_federativa_brasil (sigla),
+CONSTRAINT FOREIGN KEY (pk_usuario) REFERENCES usuario (id_usuario),
+CONSTRAINT FOREIGN KEY (pk_configuracao_slack) REFERENCES configuracao_slack (id_configuracao_slack),
+CONSTRAINT FOREIGN KEY (fk_preferencias_visualizacao_dashboard) REFERENCES preferencias_visualizacao_dashboard (id_preferencias_visualizacao_dashboard),
+PRIMARY KEY (id_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla)
+);
+
