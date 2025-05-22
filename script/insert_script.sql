@@ -89,31 +89,31 @@ INSERT INTO Preferencias_Visualizacao_Dashboard (
 INSERT INTO tela_dashboard (fk_preferencias_visualizacao_dashboard, fk_usuario, tela, ativo) VALUES
 
 -- Usuário 2
-(2, 2, 'sazonalidade', 'sim'),
-(2, 2, 'perfilTurista', 'sim'),
-(2, 2, 'panoramaGeral', 'sim'),
+(1, 2, 'sazonalidade', 'sim'),
+(1, 2, 'perfilTurista', 'sim'),
+(1, 2, 'panoramaGeral', 'sim'),
 
 -- Usuário 3
-(3, 3, 'sazonalidade', 'sim'),
-(3, 3, 'perfilTurista', 'sim'),
-(3, 3, 'panoramaGeral', 'sim'),
+(2, 3, 'sazonalidade', 'sim'),
+(2, 3, 'perfilTurista', 'sim'),
+(2, 3, 'panoramaGeral', 'sim'),
 
 -- Usuário 4
-(4, 4, 'sazonalidade', 'sim'),
-(4, 4, 'perfilTurista', 'sim'),
-(4, 4, 'panoramaGeral', 'sim'),
+(3, 4, 'sazonalidade', 'sim'),
+(3, 4, 'perfilTurista', 'sim'),
+(3, 4, 'panoramaGeral', 'sim'),
 
 -- Usuário 5
-(5, 5, 'sazonalidade', 'sim'),
-(5, 5, 'perfilTurista', 'sim'),
-(5, 5, 'panoramaGeral', 'sim'),
+(4, 5, 'sazonalidade', 'sim'),
+(4, 5, 'perfilTurista', 'sim'),
+(4, 5, 'panoramaGeral', 'sim'),
 
 -- Usuário 6
-(6, 6, 'sazonalidade', 'sim'),
-(6, 6, 'perfilTurista', 'sim'),
-(6, 6, 'panoramaGeral', 'sim'),
+(5, 6, 'sazonalidade', 'sim'),
+(5, 6, 'perfilTurista', 'sim'),
+(5, 6, 'panoramaGeral', 'sim'),
 
 -- Usuário 7
-(7, 7, 'sazonalidade', 'sim'),
-(7, 7, 'perfilTurista', 'sim'),
-(7, 7, 'panoramaGeral', 'sim');
+(6, 7, 'sazonalidade', 'sim'),
+(6, 7, 'perfilTurista', 'sim'),
+(6, 7, 'panoramaGeral', 'sim');
