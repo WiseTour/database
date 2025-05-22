@@ -207,7 +207,8 @@ fk_informacao_contato_cadastro INT,
 fk_uf_sigla CHAR(2),
 fk_endereco INT,
 fk_usuario INT,
-CONSTRAINT FOREIGN KEY (fk_endereco, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla) REFERENCES empresa (fk_endereco, cnpj, fk_informacao_contato_cadastro, fk_uf_sigla),
+CONSTRAINT FOREIGN KEY (fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla, fk_endereco) 
+REFERENCES empresa (cnpj, fk_informacao_contato_cadastro, fk_uf_sigla, fk_endereco),
 CONSTRAINT FOREIGN KEY (fk_usuario) REFERENCES usuario (id_usuario),
 PRIMARY KEY (id_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla, fk_endereco, fk_usuario)
 );
