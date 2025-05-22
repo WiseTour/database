@@ -1,6 +1,6 @@
 CREATE DATABASE IF NOT EXISTS WiseTour;
 
-USE WISETOUR;
+USE WiseTour;
 
 CREATE TABLE unidade_federativa_brasil (
 sigla CHAR(2) PRIMARY KEY,
