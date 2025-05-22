@@ -1,7 +1,16 @@
 USE WiseTour;
 
-INSERT IGNORE INTO Unidade_Federativa_Brasil (sigla, unidade_federativa, regiao)
-VALUES
+INSERT INTO etapa (etapa) VALUES
+('extracao'),
+('tratamento'),
+('carregamento');
+
+INSERT INTO log_categoria (categoria) VALUES
+('erro'),
+('aviso'),
+('sucesso');
+
+INSERT INTO unidade_federativa_brasil (sigla, unidade_federativa, regiao) VALUES
 ('AC', 'Acre', 'Norte'),
 ('AL', 'Alagoas', 'Nordeste'),
 ('AP', 'Amapá', 'Norte'),
@@ -31,45 +40,81 @@ VALUES
 ('TO', 'Tocantins', 'Norte'),
 ('OF', 'Outras Unidades da Federação', null);
 
+INSERT INTO informacao_contato_cadastro (email, telefone, nome, fidelizado)
+VALUES ('contato@wisetour.com.br', '11999999999', 'WiseTour Turismo Ltda.', 'sim');
 
--- 2. Informação de contato
-INSERT INTO Informacao_Contato_Cadastro (
-    email, telefone, nome, fidelizado
-) VALUES (
-    'contato@wisetour.com.br', '11934483566', 'joão', 'Sim'
-);
+INSERT INTO endereco (cep, tipo_logradouro, nome_logradouro, numero, complemento, bairro, cidade, fk_uf_sigla)
+VALUES ('01001000', 'Avenida', 'Paulista', 1000, 'Conj. 101', 'Bela Vista', 'São Paulo', 'SP');
 
--- 3. Empresa
-INSERT INTO Empresa (
-  cnpj, nome_fantasia, razao_social, fk_informacao_contato_cadastro,
-  cep, tipo_logradouro, nome_logradouro, numero, complemento,
-  bairro, cidade, fk_uf_sigla
-) VALUES (
-  '12345678000199', 'WiseTour', 'WiseTour Tecnologia em Dados Ltda', 1,
-  '01001000', 'Avenida', 'Paulista', 1000, 'Conjunto 101',
-  'Bela Vista', 'São Paulo', 'SP'
-);
+INSERT INTO empresa (cnpj, fk_informacao_contato_cadastro, fk_endereco, fk_uf_sigla)
+VALUES ('12345678000199', 1, 1, 'SP');
 
--- 4. Funcionários (sem FKs)
-INSERT INTO Funcionario (
-    nome, cargo, telefone, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla
+INSERT INTO usuario (email, senha, permissao) VALUES
+('admin', 'admin123', 'admin'),
+('leonardo.sardinha@outlook.com', 'urubu100', 'padrao'),
+('ian.medeiros@outlook.com', 'urubu100', 'padrao'),
+('luana.liriel@outlook.com', 'urubu100', 'padrao'),
+('kenner.lima@outlook.com', 'urubu100', 'padrao'),
+('phelipe.bruione@outlook.com', 'urubu100', 'padrao'),
+('samara.damaceno@outlook.com', 'urubu100', 'padrao');
+
+INSERT INTO funcionario (nome, cargo, telefone, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla, fk_endereco, fk_usuario) VALUES
+('Leonardo Sardinha', 'Analista de Dados', '11911111111', '12345678000199', 1, 'SP', 1, 2),
+('Ian Medeiros', 'Desenvolvedor Backend', '11922222222', '12345678000199', 1, 'SP', 1, 3),
+('Luana Liriel', 'Analista de Negócios', '11933333333', '12345678000199', 1, 'SP', 1, 4),
+('Kenner Lima', 'Dev Frontend', '11944444444', '12345678000199', 1, 'SP', 1, 5),
+('Phelipe Bruione', 'Product Owner', '11955555555', '12345678000199', 1, 'SP', 1, 6),
+('Samara Damaceno', 'UX Designer', '11966666666', '12345678000199', 1, 'SP', 1, 7);
+
+INSERT INTO preferencias_visualizacao_dashboard (fk_usuario, ativo) VALUES
+(2, 'sim'),
+(3, 'sim'),
+(4, 'sim'),
+(5, 'sim'),
+(6, 'sim'),
+(7, 'sim');
+
+
+INSERT INTO Preferencias_Visualizacao_Dashboard (
+  fk_usuario,
+  ativo
 ) VALUES
-('Leonardo Sardinha', 'Analista de Sistemas', '11934483566', '12345678000199', 1, 'SP'),
-('Juliana Alves', 'Gerente de Projetos', '11934483566', '12345678000199', 1, 'SP');
+(2, 'Sim'),
+(3, 'Não'), 
+(4, 'Sim'),   
+(5, 'Sim'),   
+(6, 'Não'),   
+(7, 'Não');   
 
--- 5. Usuários com TODAS as FKs
-INSERT INTO usuario (
-    fk_funcionario, fk_cnpj, fk_uf_sigla, fk_informacao_contato_cadastro, email, senha, permissao
-) VALUES
-(1, '12345678000199', 'SP', 1, 'leonardo.sardinha@outlook.com', 'urubu100', 'padrao'),
-(1, '12345678000199', 'SP', 1, 'juliana.alves@outlook.com', 'admin123', 'admin');
 
-INSERT INTO Log_Categoria (categoria) VALUES
-('Erro'),
-('Aviso'),
-('Sucesso');
+INSERT INTO tela_dashboard (fk_preferencias_visualizacao_dashboard, fk_usuario, tela, ativo) VALUES
 
-INSERT INTO Etapa (etapa) VALUES
-('Extração'),
-('Tratamento'),
-('Carregamento');
+-- Usuário 2
+(2, 2, 'sazonalidade', 'sim'),
+(2, 2, 'perfilTurista', 'sim'),
+(2, 2, 'panoramaGeral', 'sim'),
+
+-- Usuário 3
+(3, 3, 'sazonalidade', 'sim'),
+(3, 3, 'perfilTurista', 'sim'),
+(3, 3, 'panoramaGeral', 'sim'),
+
+-- Usuário 4
+(4, 4, 'sazonalidade', 'sim'),
+(4, 4, 'perfilTurista', 'sim'),
+(4, 4, 'panoramaGeral', 'sim'),
+
+-- Usuário 5
+(5, 5, 'sazonalidade', 'sim'),
+(5, 5, 'perfilTurista', 'sim'),
+(5, 5, 'panoramaGeral', 'sim'),
+
+-- Usuário 6
+(6, 6, 'sazonalidade', 'sim'),
+(6, 6, 'perfilTurista', 'sim'),
+(6, 6, 'panoramaGeral', 'sim'),
+
+-- Usuário 7
+(7, 7, 'sazonalidade', 'sim'),
+(7, 7, 'perfilTurista', 'sim'),
+(7, 7, 'panoramaGeral', 'sim');
