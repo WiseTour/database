@@ -1,4 +1,6 @@
-USE WiseTour;
+CREATE DATABASE IF NOT EXISTS WiseTour;
+
+USE WISETOUR;
 
 CREATE TABLE unidade_federativa_brasil (
 sigla CHAR(2) PRIMARY KEY,
@@ -126,8 +128,7 @@ fk_log_categoria INT,
 fk_configuracao_slack INT,
 fk_usuario INT,
 CONSTRAINT FOREIGN KEY (fk_log_categoria) REFERENCES log_categoria (id_log_categoria),
-CONSTRAINT FOREIGN KEY (fk_configuracao_slack) REFERENCES configuracao_slack (id_configuracao_slack),
-CONSTRAINT FOREIGN KEY (fk_usuario) REFERENCES configuracao_slack (fk_usuario),
+CONSTRAINT FOREIGN KEY (fk_configuracao_slack, fk_usuario) REFERENCES configuracao_slack (id_configuracao_slack, fk_usuario),
 PRIMARY KEY (fk_log_categoria, fk_configuracao_slack, fk_usuario)
 );
 
@@ -148,8 +149,7 @@ tela VARCHAR(13) NOT NULL,
 ativo CHAR(3) NOT NULL,
 CONSTRAINT chk_tela CHECK (tela IN ('sazonalidade', 'perfilTurista', 'panoramaGeral')),
 CONSTRAINT chk_ativo_tela_dashboard CHECK (ativo IN ('sim', 'nao')),
-CONSTRAINT FOREIGN KEY (fk_preferencias_visualizacao_dashboard) REFERENCES preferencias_visualizacao_dashboard (id_preferencias_visualizacao_dashboard),
-CONSTRAINT FOREIGN KEY (fk_usuario) REFERENCES preferencias_visualizacao_dashboard (fk_usuario),
+CONSTRAINT FOREIGN KEY (fk_preferencias_visualizacao_dashboard, fk_usuario) REFERENCES preferencias_visualizacao_dashboard (id_preferencias_visualizacao_dashboard, fk_usuario),
 PRIMARY KEY (id_tela_dashboard, fk_preferencias_visualizacao_dashboard, fk_usuario)
 );
 
@@ -208,10 +208,7 @@ fk_informacao_contato_cadastro INT,
 fk_uf_sigla CHAR(2),
 fk_endereco INT,
 fk_usuario INT,
-CONSTRAINT FOREIGN KEY (fk_endereco) REFERENCES empresa (fk_endereco),
-CONSTRAINT FOREIGN KEY (fk_cnpj) REFERENCES empresa (cnpj),
-CONSTRAINT FOREIGN KEY (fk_informacao_contato_cadastro) REFERENCES empresa (fk_informacao_contato_cadastro),
-CONSTRAINT FOREIGN KEY (fk_uf_sigla) REFERENCES empresa (fk_sigla),
+CONSTRAINT FOREIGN KEY (fk_endereco, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla) REFERENCES empresa (fk_endereco, cnpj, fk_informacao_contato_cadastro, fk_uf_sigla),
 CONSTRAINT FOREIGN KEY (fk_usuario) REFERENCES usuario (id_usuario),
 PRIMARY KEY (id_funcionario, fk_cnpj, fk_informacao_contato_cadastro, fk_uf_sigla, fk_endereco, fk_usuario)
 );
