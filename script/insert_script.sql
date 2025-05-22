@@ -74,17 +74,6 @@ INSERT INTO preferencias_visualizacao_dashboard (fk_usuario, ativo) VALUES
 (6, 'sim'),
 (7, 'sim');
 
-INSERT INTO Preferencias_Visualizacao_Dashboard (
-  fk_usuario,
-  ativo
-) VALUES
-(2, 'Sim'),
-(3, 'Não'), 
-(4, 'Sim'),   
-(5, 'Sim'),   
-(6, 'Não'),   
-(7, 'Não');   
-
 
 INSERT INTO tela_dashboard (fk_preferencias_visualizacao_dashboard, fk_usuario, tela, ativo) VALUES
 
