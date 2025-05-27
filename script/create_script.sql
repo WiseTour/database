@@ -1,3 +1,4 @@
+DROP DATABASE WiseTour;
 CREATE DATABASE IF NOT EXISTS WiseTour;
 
 USE WiseTour;
@@ -9,20 +10,18 @@ regiao VARCHAR(45)
 );
 
 /* ETL */
-CREATE TABLE fonte_dados (
-id_fonte_dados INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE origem_dados (
+id_origem_dados INT PRIMARY KEY AUTO_INCREMENT,
 titulo_arquivo_fonte VARCHAR(255) UNIQUE NOT NULL,
 edicao VARCHAR(45) NOT NULL,
-orgao_emissor VARCHAR(45) NOT NULL,
-url_origem TEXT NOT NULL,
-data_coleta DATE NOT NULL,
-observacoes TEXT
+orgao_emissor VARCHAR(45) NOT NULL
 );
 
 CREATE TABLE pais (
 id_pais INT PRIMARY KEY AUTO_INCREMENT,
 pais VARCHAR(100) NOT NULL UNIQUE
 );
+
 
 CREATE TABLE perfil_estimado_turistas (
 id_perfil_estimado_turistas INT AUTO_INCREMENT,
@@ -39,24 +38,25 @@ fonte_informacao_viagem VARCHAR(45),
 servico_agencia_turismo INT,
 motivo_viagem VARCHAR(45) NOT NULL,
 motivacao_viagem_lazer VARCHAR(45),
-gasto_media_percapita_em_reais DOUBLE NOT NULL,
+gasto_media_percapita_em_dolar DOUBLE NOT NULL,
 CONSTRAINT FOREIGN KEY (fk_pais_origem) REFERENCES pais (id_pais),
 CONSTRAINT FOREIGN KEY (fk_uf_entrada) REFERENCES unidade_federativa_brasil (sigla),
 PRIMARY KEY (id_perfil_estimado_turistas, fk_pais_origem, fk_uf_entrada)
 );
 
-CREATE TABLE perfil_estimado_turista_fonte (
-    fk_fonte INT,
+CREATE TABLE perfil_estimado_turista_origem (
+    fk_origem_dados INT,
     fk_perfil_estimado_turistas INT,
     fk_pais_origem INT,
     fk_uf_entrada CHAR(2),
-    CONSTRAINT FOREIGN KEY (fk_fonte) REFERENCES fonte_dados (id_fonte_dados),
+    data_coleta DATE NOT NULL,
+    CONSTRAINT FOREIGN KEY (fk_origem_dados) REFERENCES origem_dados (id_origem_dados),
     CONSTRAINT FOREIGN KEY (fk_perfil_estimado_turistas, fk_pais_origem, fk_uf_entrada)
         REFERENCES perfil_estimado_turistas (id_perfil_estimado_turistas, fk_pais_origem, fk_uf_entrada),
-    PRIMARY KEY (fk_fonte, fk_perfil_estimado_turistas, fk_pais_origem, fk_uf_entrada)
+    PRIMARY KEY (fk_origem_dados, fk_perfil_estimado_turistas, fk_pais_origem, fk_uf_entrada)
 );
 
-CREATE TABLE destinos (
+CREATE TABLE destino (
 fk_perfil_estimado_turistas INT,
 fk_pais_origem INT,
 fk_uf_destino CHAR(2),
@@ -72,31 +72,32 @@ PRIMARY KEY (fk_perfil_estimado_turistas, fk_pais_origem, fk_uf_destino, fk_uf_e
 /* LOG */
 
 CREATE TABLE etapa (
-id_etapa INT PRIMARY KEY AUTO_INCREMENT,
-etapa VARCHAR(45) NOT NULL,
-CONSTRAINT chk_etapa CHECK (etapa IN ('extracao', 'tratamento', 'carregamento'))
+    id_etapa INT PRIMARY KEY,
+    etapa VARCHAR(45) NOT NULL UNIQUE,
+    CONSTRAINT chk_etapa CHECK (etapa IN ('extracao', 'tratamento', 'transformacao', 'carregamento', 'conexao_s3', 'finalizacao', 'inicializacao'))
 );
 
 CREATE TABLE log_categoria (
 id_log_categoria INT PRIMARY KEY AUTO_INCREMENT,
-categoria VARCHAR(45) NOT NULL,
+categoria VARCHAR(45) NOT NULL UNIQUE,
 CONSTRAINT chk_categoria CHECK (categoria IN('erro', 'aviso', 'sucesso'))
 );
 
 CREATE TABLE log (
 id_log INT AUTO_INCREMENT,
-fk_fonte INT,
 fk_log_categoria INT,
 fk_etapa INT,
+fk_origem_dados INT,
+fk_perfil_estimado_turistas INT,
+fk_pais_origem INT,
+fk_uf_entrada CHAR(2),
 mensagem TEXT NOT NULL,
 data_hora DATETIME NOT NULL,
-quantidade_lida INT NULL,
-quantidade_inserida INT NULL,
-tabela_destino VARCHAR(45) NULL,
-CONSTRAINT FOREIGN KEY (fk_fonte) REFERENCES fonte_dados (id_fonte_dados),
+CONSTRAINT FOREIGN KEY (fk_origem_dados, fk_perfil_estimado_turistas, fk_pais_origem, fk_uf_entrada)
+REFERENCES perfil_estimado_turista_origem (fk_origem_dados, fk_perfil_estimado_turistas, fk_pais_origem, fk_uf_entrada),
 CONSTRAINT FOREIGN KEY (fk_log_categoria) REFERENCES log_categoria (id_log_categoria),
 CONSTRAINT FOREIGN KEY (fk_etapa) REFERENCES etapa (id_etapa),
-PRIMARY KEY (id_log, fk_fonte, fk_log_categoria, fk_etapa)
+PRIMARY KEY (id_log, fk_log_categoria, fk_etapa)
 );
 
 /* USUÁRIO */
@@ -106,7 +107,7 @@ id_usuario INT AUTO_INCREMENT PRIMARY KEY,
 email VARCHAR(255) NOT NULL UNIQUE,
 senha CHAR(12) NOT NULL,
 permissao VARCHAR(45) NOT NULL,
-CONSTRAINT chk_permissao CHECK (permissao IN ('admin', 'padrao', 'gerente'))
+CONSTRAINT chk_permissao CHECK (permissao IN ('admin', 'padrao', 'wisetour'))
 );
 
 /* CONFIGURACOES E PREFERÊNCIAS DASHBOARD E SLACK */
@@ -165,12 +166,13 @@ CONSTRAINT chk_fidelizado CHECK (fidelizado IN ('sim', 'nao'))
 );
 
 CREATE TABLE historico_contato (
-id_historico_contato INT PRIMARY KEY AUTO_INCREMENT,
+id_historico_contato INT AUTO_INCREMENT,
+fk_informacao_contato_cadastro INT,
 data_contato DATE NOT NULL,
 anotacoes TEXT NOT NULL,
 responsavel VARCHAR(255) NOT NULL,
-fk_informacao_contato_cadastro INT,
-CONSTRAINT FOREIGN KEY (fk_informacao_contato_cadastro) REFERENCES informacao_contato_cadastro (id_informacao_contato_cadastro)
+CONSTRAINT FOREIGN KEY (fk_informacao_contato_cadastro) REFERENCES informacao_contato_cadastro (id_informacao_contato_cadastro),
+PRIMARY KEY (id_historico_contato, fk_informacao_contato_cadastro)
 );
 
 CREATE TABLE endereco (

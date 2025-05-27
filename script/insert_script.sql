@@ -1,14 +1,18 @@
 USE WiseTour;
 
-INSERT INTO etapa (etapa) VALUES
-('extracao'),
-('tratamento'),
-('carregamento');
+INSERT INTO etapa (id_etapa, etapa) VALUES
+(1, 'inicializacao'),
+(2, 'conexao_s3'),
+(3, 'extracao'),
+(4, 'tratamento'),
+(5, 'transformacao'),
+(6, 'carregamento'),
+(7, 'finalizacao');
 
-INSERT INTO log_categoria (categoria) VALUES
-('erro'),
-('aviso'),
-('sucesso');
+INSERT INTO log_categoria (id_log_categoria, categoria) VALUES
+(1, 'erro'),
+(2, 'aviso'),
+(3,'sucesso');
 
 INSERT INTO unidade_federativa_brasil (sigla, unidade_federativa, regiao) VALUES
 ('AC', 'Acre', 'Norte'),
@@ -39,6 +43,8 @@ INSERT INTO unidade_federativa_brasil (sigla, unidade_federativa, regiao) VALUES
 ('SE', 'Sergipe', 'Nordeste'),
 ('TO', 'Tocantins', 'Norte'),
 ('OF', 'Outras Unidades da Federação', null);
+
+
 
 INSERT INTO informacao_contato_cadastro (email, telefone, nome, fidelizado)
 VALUES ('contato@wisetour.com.br', '11999999999', 'WiseTour Turismo Ltda.', 'sim');
@@ -106,3 +112,9 @@ INSERT INTO tela_dashboard (fk_preferencias_visualizacao_dashboard, fk_usuario, 
 (6, 7, 'sazonalidade', 'sim'),
 (6, 7, 'perfilTurista', 'sim'),
 (6, 7, 'panoramaGeral', 'sim');
+
+select * from perfil_estimado_turistas join pais on fk_pais_origem = id_pais where quantidade_turistas > 5 order by quantidade_turistas;
+SELECT SUM(quantidade_turistas) AS total_turistas
+FROM perfil_estimado_turistas;
+
+select * from log;
