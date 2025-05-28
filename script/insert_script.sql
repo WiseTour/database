@@ -12,7 +12,8 @@ INSERT INTO etapa (id_etapa, etapa) VALUES
 INSERT INTO log_categoria (id_log_categoria, categoria) VALUES
 (1, 'erro'),
 (2, 'aviso'),
-(3,'sucesso');
+(3,'sucesso'),
+(4,'info');
 
 INSERT INTO unidade_federativa_brasil (sigla, unidade_federativa, regiao) VALUES
 ('AC', 'Acre', 'Norte'),

@@ -80,7 +80,7 @@ CREATE TABLE etapa (
 CREATE TABLE log_categoria (
 id_log_categoria INT PRIMARY KEY AUTO_INCREMENT,
 categoria VARCHAR(45) NOT NULL UNIQUE,
-CONSTRAINT chk_categoria CHECK (categoria IN('erro', 'aviso', 'sucesso'))
+CONSTRAINT chk_categoria CHECK (categoria IN('erro', 'aviso', 'sucesso', 'info'))
 );
 
 CREATE TABLE log (
@@ -92,6 +92,7 @@ fk_perfil_estimado_turistas INT,
 fk_pais_origem INT,
 fk_uf_entrada CHAR(2),
 mensagem TEXT NOT NULL,
+erro TEXT,
 data_hora DATETIME NOT NULL,
 CONSTRAINT FOREIGN KEY (fk_origem_dados, fk_perfil_estimado_turistas, fk_pais_origem, fk_uf_entrada)
 REFERENCES perfil_estimado_turista_origem (fk_origem_dados, fk_perfil_estimado_turistas, fk_pais_origem, fk_uf_entrada),
