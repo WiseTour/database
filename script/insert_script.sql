@@ -119,3 +119,5 @@ SELECT SUM(quantidade_turistas) AS total_turistas
 FROM perfil_estimado_turistas;
 
 select * from log;
+
+
