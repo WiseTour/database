@@ -161,9 +161,10 @@ CONSTRAINT chk_tela CHECK (tela IN ('sazonalidade', 'perfilTurista', 'panoramaGe
 );
 
 INSERT INTO tela_dashboard (tela) VALUES
-('sazonalidade'),
+('panoramaGeral'),
 ('perfilTurista'),
-('panoramaGeral');
+('sazonalidade');
+
 
 CREATE TABLE preferencia_visualizacao_dashboard (
 fk_tela_dashboard INT,
