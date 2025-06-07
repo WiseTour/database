@@ -33,5 +33,5 @@ SET canal_padrao = '#leonardo-alertas', ativo = 'sim' where fk_usuario = 2;
 
 select * from configuracao_slack;
 select * from tipo_notificacao_dados;
-select * from preferencia_visualizacao_dashboard order by fk_usuario;
+select * from preferencia_visualizacao_dashboard where fk_usuario = 2;
 select * from informacao_contato_cadastro;
