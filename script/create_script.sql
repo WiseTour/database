@@ -128,14 +128,13 @@ INSERT INTO log_categoria (id_log_categoria, categoria) VALUES
 
 CREATE TABLE log (
 id_log INT AUTO_INCREMENT,
-fk_log_categoria INT,
+fk_log_categoria INT NOT NULL,
 fk_etapa INT,
 fk_origem_dados INT,
 fk_perfil_estimado_turistas INT,
 fk_pais_origem INT,
 fk_uf_entrada CHAR(2),
 mensagem TEXT NOT NULL,
-erro TEXT,
 data_hora DATETIME NOT NULL,
 CONSTRAINT FOREIGN KEY (fk_origem_dados, fk_perfil_estimado_turistas, fk_pais_origem, fk_uf_entrada)
 REFERENCES perfil_estimado_turista_origem (fk_origem_dados, fk_perfil_estimado_turistas, fk_pais_origem, fk_uf_entrada),
@@ -179,7 +178,7 @@ PRIMARY KEY (fk_tela_dashboard, fk_usuario)
 CREATE TABLE configuracao_slack (
   id_configuracao_slack INT,
   fk_usuario INT,
-  canal_padrao VARCHAR(255) NULL,
+  webhook_canal_padrao VARCHAR(255) NULL,
   ativo CHAR(3) NOT NULL,
   CONSTRAINT chk_ativo CHECK (ativo IN ('sim', 'nao')),
   CONSTRAINT fk_config_usuario FOREIGN KEY (fk_usuario) REFERENCES usuario(id_usuario),
@@ -210,7 +209,7 @@ BEGIN
     FROM tela_dashboard td;
 
     -- Inserir configuração do Slack com id igual ao id do usuário
-    INSERT INTO configuracao_slack (id_configuracao_slack, fk_usuario, canal_padrao, ativo)
+    INSERT INTO configuracao_slack (id_configuracao_slack, fk_usuario, webhook_canal_padrao, ativo)
     VALUES (NEW.id_usuario, NEW.id_usuario, NULL, 'nao');
 
     -- Inserir tipos de notificações para cada etapa com a configuração do Slack recém-criada
