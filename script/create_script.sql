@@ -2,6 +2,10 @@ CREATE DATABASE IF NOT EXISTS WiseTour;
 
 USE WiseTour;
 
+CREATE USER 'user-app'@'%' IDENTIFIED WITH caching_sha2_password BY 'urubu100';
+GRANT ALL PRIVILEGES ON WiseTour.* TO 'user-java'@'%';
+FLUSH PRIVILEGES;
+
 /* ETL */
 CREATE TABLE origem_dados (
 id_origem_dados INT PRIMARY KEY AUTO_INCREMENT,
