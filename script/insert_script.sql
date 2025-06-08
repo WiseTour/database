@@ -29,5 +29,5 @@ INSERT INTO funcionario (nome, cargo, telefone, fk_cnpj, fk_informacao_contato_c
 ('Samara Damaceno', 'Analista de Negócios', '11966666666', '12345678000199', 1, 'SP', 1, 7);
 
 UPDATE configuracao_slack 
-SET webhook_canal_padrao = 'https://hooks.slack.com/services/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', ativo = 'sim' where fk_usuario > 1 AND fk_usuario < 8;
+SET webhook_canal_padrao = 'https://hooks.slack.com/services/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', ativo = 'sim' where fk_usuario > 1 AND fk_usuario < 8;
 
