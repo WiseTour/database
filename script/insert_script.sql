@@ -1,5 +1,4 @@
-/* SCRIPT PARA TESTES */
-
+/* SCRIPT DE INSERT PARA TESTES */
 USE WiseTour;
 
 INSERT INTO informacao_contato_cadastro (email, telefone, nome, fidelizado)
@@ -27,7 +26,3 @@ INSERT INTO funcionario (nome, cargo, telefone, fk_cnpj, fk_informacao_contato_c
 ('Kenner Lima', 'Analista de Dados', '11944444444', '12345678000199', 1, 'SP', 1, 5),
 ('Phelipe Bruione', 'Scrum Master', '11955555555', '12345678000199', 1, 'SP', 1, 6),
 ('Samara Damaceno', 'Analista de Negócios', '11966666666', '12345678000199', 1, 'SP', 1, 7);
-
-UPDATE configuracao_slack 
-SET webhook_canal_padrao = 'https://hooks.slack.com/services/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', ativo = 'sim' where fk_usuario > 1 AND fk_usuario < 8;
-
