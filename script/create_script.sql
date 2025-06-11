@@ -3,7 +3,7 @@ CREATE DATABASE IF NOT EXISTS WiseTour;
 USE WiseTour;
 
 CREATE USER 'user-app'@'%' IDENTIFIED WITH caching_sha2_password BY 'urubu100';
-GRANT ALL PRIVILEGES ON WiseTour.* TO 'user-java'@'%';
+GRANT ALL PRIVILEGES ON WiseTour.* TO 'user-app'@'%';
 FLUSH PRIVILEGES;
 
 /* ETL */
